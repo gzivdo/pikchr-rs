@@ -23,7 +23,7 @@ extern {
     type Error = LexError;
 
     enum Token {
-        "num" => Token::Number(<f64>),
-        "eol" => Token::Eol,
+        "num" => Token::Num(<f64>, _),
+        "eol" => Token::Eol(_),
     }
 }

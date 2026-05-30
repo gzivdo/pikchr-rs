@@ -1,29 +1,467 @@
-//! Tokenizer for the Pikchr language.
+//! Tokenizer for the Pikchr language — a faithful port of `pik_token_length`
+//! (and the relevant parts of `pik_tokenize`) from pikchr.y.
 //!
-//! P0: a minimal lexer that recognizes numbers and end-of-line separators,
-//! producing LALRPOP-compatible `(start, Token, end)` triples. The full
-//! Pikchr tokenizer (numbers+units, strings, names, operators, comments,
-//! line continuations, keyword/edge classification) lands in P1.
+//! Produces LALRPOP-compatible `(start, Token, end)` triples. Whitespace and
+//! comments are dropped; `$1..$9` macro parameters are dropped at top level
+//! (they only matter inside `define` bodies, handled in a later milestone).
 
 use crate::error::LexError;
-use crate::token::Token;
+use crate::keywords::{self, KwHit};
+use crate::token::{AssignOp, Kw, Tok, Token};
 
 pub type Spanned = Result<(usize, Token, usize), LexError>;
+
+/// Convert a NUMBER token's text to inches (port of `pik_atof`).
+pub fn atof(text: &str) -> f64 {
+    let b = text.as_bytes();
+    let n = b.len();
+    if n >= 3 && b[0] == b'0' && (b[1] == b'x' || b[1] == b'X') {
+        return i64::from_str_radix(&text[2..], 16).unwrap_or(0) as f64;
+    }
+    // Parse the leading floating-point prefix, like C's strtod.
+    let (val, consumed) = strtod_prefix(text);
+    // Unit suffix applies only when it is exactly the final two characters.
+    if consumed == n.wrapping_sub(2) && n >= 2 {
+        let c1 = b[consumed];
+        let c2 = b[consumed + 1];
+        return match (c1, c2) {
+            (b'c', b'm') => val / 2.54,
+            (b'm', b'm') => val / 25.4,
+            (b'p', b'x') => val / 96.0,
+            (b'p', b't') => val / 72.0,
+            (b'p', b'c') => val / 6.0,
+            _ => val, // "in" and anything else: inches / unchanged
+        };
+    }
+    val
+}
+
+/// Parse a leading C-`strtod`-style float, returning (value, bytes_consumed).
+fn strtod_prefix(s: &str) -> (f64, usize) {
+    let b = s.as_bytes();
+    let mut i = 0;
+    if i < b.len() && (b[i] == b'+' || b[i] == b'-') {
+        i += 1;
+    }
+    while i < b.len() && b[i].is_ascii_digit() {
+        i += 1;
+    }
+    if i < b.len() && b[i] == b'.' {
+        i += 1;
+        while i < b.len() && b[i].is_ascii_digit() {
+            i += 1;
+        }
+    }
+    // exponent
+    if i < b.len() && (b[i] == b'e' || b[i] == b'E') {
+        let mut j = i + 1;
+        if j < b.len() && (b[j] == b'+' || b[j] == b'-') {
+            j += 1;
+        }
+        if j < b.len() && b[j].is_ascii_digit() {
+            j += 1;
+            while j < b.len() && b[j].is_ascii_digit() {
+                j += 1;
+            }
+            i = j;
+        }
+    }
+    let val = s[..i].parse::<f64>().unwrap_or(0.0);
+    (val, i)
+}
+
+/// The classification of a raw token, mirroring `PToken.eType`.
+#[derive(Debug, Clone, PartialEq)]
+enum Raw {
+    Whitespace,
+    Eol,
+    Error,
+    Str,
+    Codeblock,
+    Parameter,
+    Assign(AssignOp),
+    Slash,
+    Plus,
+    Star,
+    Percent,
+    Lp,
+    Rp,
+    Lb,
+    Rb,
+    Comma,
+    Colon,
+    Gt,
+    Eq,
+    Minus,
+    Lt,
+    Rarrow,
+    Larrow,
+    Lrarrow,
+    DotE,
+    DotU,
+    DotL,
+    DotXy,
+    Number,
+    Nth,
+    Classname,
+    Id,
+    Placename,
+    Kw(Kw, i32, u8),
+    Isodate,
+}
+
+#[inline]
+fn is_lower(c: u8) -> bool {
+    c.is_ascii_lowercase()
+}
+#[inline]
+fn is_upper(c: u8) -> bool {
+    c.is_ascii_uppercase()
+}
+#[inline]
+fn is_alnum(c: u8) -> bool {
+    c.is_ascii_alphanumeric()
+}
+#[inline]
+fn id_char(c: u8) -> bool {
+    is_alnum(c) || c == b'_'
+}
+
+/// Return the length (in bytes) of the next token starting at `z[0]`, plus its
+/// classification. Faithful port of `pik_token_length`.
+fn token_length(z: &[u8], allow_codeblock: bool) -> (usize, Raw) {
+    let get = |i: usize| -> u8 { *z.get(i).unwrap_or(&0) };
+    match z[0] {
+        b'\\' => {
+            let mut i = 1;
+            while matches!(get(i), b'\r' | b' ' | b'\t') {
+                i += 1;
+            }
+            if get(i) == b'\n' {
+                (i + 1, Raw::Whitespace)
+            } else {
+                (1, Raw::Error)
+            }
+        }
+        b';' | b'\n' => (1, Raw::Eol),
+        b'"' => {
+            let mut i = 1;
+            loop {
+                let c = get(i);
+                if c == 0 {
+                    return (i, Raw::Error);
+                }
+                if c == b'\\' {
+                    if get(i + 1) == 0 {
+                        return (i, Raw::Error);
+                    }
+                    i += 2;
+                    continue;
+                }
+                if c == b'"' {
+                    return (i + 1, Raw::Str);
+                }
+                i += 1;
+            }
+        }
+        b' ' | b'\t' | b'\x0c' | b'\r' => {
+            let mut i = 1;
+            while matches!(get(i), b' ' | b'\t' | b'\r' | b'\x0c') {
+                i += 1;
+            }
+            (i, Raw::Whitespace)
+        }
+        b'#' => {
+            let mut i = 1;
+            while get(i) != 0 && get(i) != b'\n' {
+                i += 1;
+            }
+            (i, Raw::Whitespace)
+        }
+        b'/' => {
+            if get(1) == b'*' {
+                let mut i = 2;
+                while get(i) != 0 && !(get(i) == b'*' && get(i + 1) == b'/') {
+                    i += 1;
+                }
+                if get(i) == b'*' {
+                    (i + 2, Raw::Whitespace)
+                } else {
+                    (i, Raw::Error)
+                }
+            } else if get(1) == b'/' {
+                let mut i = 2;
+                while get(i) != 0 && get(i) != b'\n' {
+                    i += 1;
+                }
+                (i, Raw::Whitespace)
+            } else if get(1) == b'=' {
+                (2, Raw::Assign(AssignOp::Slash))
+            } else {
+                (1, Raw::Slash)
+            }
+        }
+        b'+' => {
+            if get(1) == b'=' {
+                (2, Raw::Assign(AssignOp::Plus))
+            } else {
+                (1, Raw::Plus)
+            }
+        }
+        b'*' => {
+            if get(1) == b'=' {
+                (2, Raw::Assign(AssignOp::Star))
+            } else {
+                (1, Raw::Star)
+            }
+        }
+        b'%' => (1, Raw::Percent),
+        b'(' => (1, Raw::Lp),
+        b')' => (1, Raw::Rp),
+        b'[' => (1, Raw::Lb),
+        b']' => (1, Raw::Rb),
+        b',' => (1, Raw::Comma),
+        b':' => (1, Raw::Colon),
+        b'>' => (1, Raw::Gt),
+        b'=' => {
+            if get(1) == b'=' {
+                (2, Raw::Eq)
+            } else {
+                (1, Raw::Assign(AssignOp::Set))
+            }
+        }
+        b'-' => {
+            if get(1) == b'>' {
+                (2, Raw::Rarrow)
+            } else if get(1) == b'=' {
+                (2, Raw::Assign(AssignOp::Minus))
+            } else {
+                (1, Raw::Minus)
+            }
+        }
+        b'<' => {
+            if get(1) == b'-' {
+                if get(2) == b'>' {
+                    (3, Raw::Lrarrow)
+                } else {
+                    (2, Raw::Larrow)
+                }
+            } else {
+                (1, Raw::Lt)
+            }
+        }
+        0xe2 => {
+            // Unicode arrows: ← → ↔
+            if get(1) == 0x86 {
+                match get(2) {
+                    0x90 => return (3, Raw::Larrow),
+                    0x92 => return (3, Raw::Rarrow),
+                    0x94 => return (3, Raw::Lrarrow),
+                    _ => {}
+                }
+            }
+            (1, Raw::Error)
+        }
+        b'{' => {
+            if !allow_codeblock {
+                return (1, Raw::Error);
+            }
+            let mut i = 1;
+            let mut depth = 1;
+            while get(i) != 0 && depth > 0 {
+                let (len, _) = token_length(&z[i..], false);
+                if len == 1 {
+                    if get(i) == b'{' {
+                        depth += 1;
+                    }
+                    if get(i) == b'}' {
+                        depth -= 1;
+                    }
+                }
+                i += len;
+            }
+            if depth != 0 {
+                (1, Raw::Error)
+            } else {
+                (i, Raw::Codeblock)
+            }
+        }
+        b'&' => {
+            const ENTITIES: &[(&[u8], Raw)] = &[
+                (b"&rarr;", Raw::Rarrow),
+                (b"&rightarrow;", Raw::Rarrow),
+                (b"&larr;", Raw::Larrow),
+                (b"&leftarrow;", Raw::Larrow),
+                (b"&leftrightarrow;", Raw::Lrarrow),
+            ];
+            for (ent, raw) in ENTITIES {
+                if z.len() >= ent.len() && &z[..ent.len()] == *ent {
+                    return (ent.len(), raw.clone());
+                }
+            }
+            (1, Raw::Error)
+        }
+        b'.' => {
+            let c1 = get(1);
+            if is_lower(c1) {
+                // Read the following lowercase word just to classify the dot;
+                // the dot token itself is 1 byte (the word is re-lexed).
+                let mut i = 2;
+                while is_lower(get(i)) {
+                    i += 1;
+                }
+                let word = std::str::from_utf8(&z[1..i]).unwrap_or("");
+                match keywords::lookup(word) {
+                    Some(h) if keywords::is_edge_like(&h) => (1, Raw::DotE),
+                    Some(h) if keywords::is_xy(&h) => (1, Raw::DotXy),
+                    _ => (1, Raw::DotL),
+                }
+            } else if c1.is_ascii_digit() {
+                number(z)
+            } else if is_upper(c1) {
+                (1, Raw::DotU)
+            } else {
+                (1, Raw::Error)
+            }
+        }
+        c if c.is_ascii_digit() => number(z),
+        c if is_lower(c) => {
+            let mut i = 1;
+            while id_char(get(i)) {
+                i += 1;
+            }
+            let word = std::str::from_utf8(&z[..i]).unwrap_or("");
+            match keywords::lookup(word) {
+                Some(KwHit::Kw(k, code, edge)) => (i, Raw::Kw(k, code, edge)),
+                Some(KwHit::Nth) => (i, Raw::Nth),
+                Some(KwHit::Isodate) => (i, Raw::Isodate),
+                None => {
+                    if keywords::is_class_name(word) {
+                        (i, Raw::Classname)
+                    } else {
+                        (i, Raw::Id)
+                    }
+                }
+            }
+        }
+        c if is_upper(c) => {
+            let mut i = 1;
+            while id_char(get(i)) {
+                i += 1;
+            }
+            (i, Raw::Placename)
+        }
+        b'$' if (b'1'..=b'9').contains(&get(1)) && !get(2).is_ascii_digit() => {
+            (2, Raw::Parameter)
+        }
+        b'_' | b'$' | b'@' => {
+            let mut i = 1;
+            while id_char(get(i)) {
+                i += 1;
+            }
+            (i, Raw::Id)
+        }
+        _ => (1, Raw::Error),
+    }
+}
+
+/// Parse a NUMBER (or NTH) token starting at `z[0]`, which is a digit or `.`.
+/// Faithful port of the numeric branch of `pik_token_length`.
+fn number(z: &[u8]) -> (usize, Raw) {
+    let get = |i: usize| -> u8 { *z.get(i).unwrap_or(&0) };
+    let c0 = z[0];
+    let mut i;
+    let mut is_int = true;
+    let mut n_digit;
+    if c0 != b'.' {
+        n_digit = 1;
+        i = 1;
+        while get(i).is_ascii_digit() {
+            n_digit += 1;
+            i += 1;
+        }
+        if i == 1 && (get(i) == b'x' || get(i) == b'X') {
+            i = 2;
+            while get(i) != 0 && get(i).is_ascii_hexdigit() {
+                i += 1;
+            }
+            return (i, Raw::Number);
+        }
+    } else {
+        is_int = false;
+        n_digit = 0;
+        i = 0;
+    }
+    if get(i) == b'.' {
+        is_int = false;
+        i += 1;
+        while get(i).is_ascii_digit() {
+            n_digit += 1;
+            i += 1;
+        }
+    }
+    if n_digit == 0 {
+        return (i, Raw::Error);
+    }
+    if get(i) == b'e' || get(i) == b'E' {
+        let i_before = i;
+        i += 1;
+        let mut c2 = get(i);
+        if c2 == b'+' || c2 == b'-' {
+            i += 1;
+            c2 = get(i);
+        }
+        if !c2.is_ascii_digit() {
+            i = i_before;
+        } else {
+            i += 1;
+            is_int = false;
+            while get(i).is_ascii_digit() {
+                i += 1;
+            }
+        }
+    }
+    let c = get(i);
+    let c2 = if c != 0 { get(i + 1) } else { 0 };
+    if is_int
+        && matches!(
+            (c, c2),
+            (b't', b'h') | (b'r', b'd') | (b'n', b'd') | (b's', b't')
+        )
+    {
+        return (i + 2, Raw::Nth);
+    }
+    if matches!(
+        (c, c2),
+        (b'i', b'n') | (b'c', b'm') | (b'm', b'm') | (b'p', b't') | (b'p', b'x') | (b'p', b'c')
+    ) {
+        i += 2;
+    }
+    (i, Raw::Number)
+}
 
 /// Streaming lexer over a Pikchr source string.
 pub struct Lexer<'input> {
     input: &'input str,
-    bytes: &'input [u8],
+    bytes: Vec<u8>, // NUL-terminated copy so lookahead past the end reads 0
     pos: usize,
 }
 
 impl<'input> Lexer<'input> {
     pub fn new(input: &'input str) -> Self {
+        let mut bytes = input.as_bytes().to_vec();
+        bytes.push(0); // sentinel; mirrors C's reliance on the NUL terminator
         Lexer {
             input,
-            bytes: input.as_bytes(),
+            bytes,
             pos: 0,
         }
+    }
+
+    fn slice(&self, start: usize, end: usize) -> &str {
+        // end is within the original input (the sentinel is never included in
+        // a token span), so this is valid UTF-8 boundary-wise for our tokens.
+        &self.input[start..end]
     }
 }
 
@@ -31,43 +469,70 @@ impl<'input> Iterator for Lexer<'input> {
     type Item = Spanned;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let b = self.bytes;
-        // Skip plain spaces/tabs (not newlines, which are EOL tokens).
-        while self.pos < b.len() && (b[self.pos] == b' ' || b[self.pos] == b'\t') {
-            self.pos += 1;
-        }
-        if self.pos >= b.len() {
-            return None;
-        }
-        let start = self.pos;
-        let c = b[self.pos];
-
-        if c == b'\n' {
-            self.pos += 1;
-            return Some(Ok((start, Token::Eol, self.pos)));
-        }
-
-        if c.is_ascii_digit() || c == b'.' {
-            while self.pos < b.len()
-                && (b[self.pos].is_ascii_digit() || b[self.pos] == b'.')
-            {
-                self.pos += 1;
+        loop {
+            // Stop at the sentinel NUL.
+            if self.pos >= self.input.len() {
+                return None;
             }
-            let text = &self.input[start..self.pos];
-            return Some(match text.parse::<f64>() {
-                Ok(n) => Ok((start, Token::Number(n), self.pos)),
-                Err(_) => Err(LexError {
-                    message: format!("invalid number {text:?}"),
-                    at: start,
-                }),
-            });
-        }
+            let start = self.pos;
+            let (len, raw) = token_length(&self.bytes[start..], true);
+            let end = (start + len).min(self.input.len());
+            self.pos = start + len;
 
-        // Unknown byte in P0: report and stop.
-        self.pos = b.len();
-        Some(Err(LexError {
-            message: format!("unexpected character {:?}", c as char),
-            at: start,
-        }))
+            let text = self.slice(start, end);
+            let mut tok = Tok::new(text, start, end);
+
+            let token = match raw {
+                Raw::Whitespace | Raw::Parameter => continue,
+                Raw::Error => {
+                    return Some(Err(LexError {
+                        message: format!("unrecognized token {text:?}"),
+                        at: start,
+                    }))
+                }
+                Raw::Eol => Token::Eol(tok),
+                Raw::Str => Token::Str(tok),
+                Raw::Codeblock => Token::Codeblock(tok),
+                Raw::Assign(op) => Token::Assign(op, tok),
+                Raw::Slash => Token::Slash(tok),
+                Raw::Plus => Token::Plus(tok),
+                Raw::Star => Token::Star(tok),
+                Raw::Percent => Token::Percent(tok),
+                Raw::Lp => Token::Lp(tok),
+                Raw::Rp => Token::Rp(tok),
+                Raw::Lb => Token::Lb(tok),
+                Raw::Rb => Token::Rb(tok),
+                Raw::Comma => Token::Comma(tok),
+                Raw::Colon => Token::Colon(tok),
+                Raw::Gt => Token::Gt(tok),
+                Raw::Eq => Token::Eq(tok),
+                Raw::Minus => Token::Minus(tok),
+                Raw::Lt => Token::Lt(tok),
+                Raw::Rarrow => Token::Rarrow(tok),
+                Raw::Larrow => Token::Larrow(tok),
+                Raw::Lrarrow => Token::Lrarrow(tok),
+                Raw::DotE => Token::DotE(tok),
+                Raw::DotU => Token::DotU(tok),
+                Raw::DotL => Token::DotL(tok),
+                Raw::DotXy => Token::DotXy(tok),
+                Raw::Number => Token::Num(atof(text), tok),
+                Raw::Nth => Token::Nth(tok),
+                Raw::Classname => Token::Classname(tok),
+                Raw::Id => Token::Id(tok),
+                Raw::Placename => Token::Placename(tok),
+                Raw::Kw(k, code, edge) => {
+                    tok.e_code = code;
+                    tok.e_edge = edge;
+                    Token::Kw(k, tok)
+                }
+                // ISO date: upstream substitutes a "YYYY-MM-DD..." string
+                // literal. We emit an empty string literal placeholder for now.
+                Raw::Isodate => {
+                    tok.text = "\"\"".to_string();
+                    Token::Str(tok)
+                }
+            };
+            return Some(Ok((start, token, end)));
+        }
     }
 }

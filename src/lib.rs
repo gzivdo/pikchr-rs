@@ -8,6 +8,7 @@
 
 use lalrpop_util::lalrpop_mod;
 
+pub mod keywords;
 pub mod lexer;
 pub mod token;
 
