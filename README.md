@@ -30,14 +30,20 @@ Under active, incremental construction. Milestones:
 | Milestone | Scope | State |
 |---|---|---|
 | P0 | crate scaffold + lexer→LALRPOP pipeline + harness | ✅ done |
-| P1 | full lexer (numbers/units, strings, names, comments, keywords) | 🚧 |
-| P2 | grammar (LALRPOP) + AST; whole official corpus parses | ⬜ |
-| P3 | expressions, variables, units, builtins, colors | ⬜ |
-| P4 | basic objects (box/circle/ellipse/line/arrow) + layout + SVG | ⬜ |
-| P5 | positioning & references (`at`/`from`/`to`/`then`, `.n`/`.c`, `last`/`2nd`, `same`) | ⬜ |
-| P6 | remaining objects & attributes (arc/spline/cylinder/oval/file/dot/move/text) | ⬜ |
+| P1 | full lexer (numbers/units, strings, names, comments, keywords) | ✅ done |
+| P2 | grammar (LALRPOP) + object model; full grammar wired | ✅ done |
+| P3 | expressions, variables, units, builtins, colors | ✅ done |
+| P4 | basic objects + layout + SVG; **geometry matches C reference** | ✅ done |
+| P5 | positioning & references (`at`/`from`/`to`/`then`-headings, `.n`/`.c`, `last`/`2nd`, `same`) | 🚧 |
+| P6 | remaining objects & attributes (arc/spline curves, text metrics, justification) | ⬜ |
 | P7 | containers `[ … ]`, `define` macros, `direction` | ⬜ |
 | P8 | full parity vs C reference, fuzzing, error parity | ⬜ |
+
+P4 geometry is validated byte-for-byte against the upstream C Pikchr on a
+corpus of simple object chains (see `tests/p4_diff.rs`). `box`, `circle`,
+`ellipse`, `line`, `arrow`, `move`, `dot`, `diamond`, `cylinder`, `file`,
+`oval`, and `text` render; directions, `then`-paths, auto-fit, rounded boxes,
+arrowheads, colors, dashes/dots, thickness and basic `at` are supported.
 
 See [`UNSUPPORTED.md`](UNSUPPORTED.md) for language constructs not yet covered.
 

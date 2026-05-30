@@ -9,7 +9,7 @@ repository = "https://github.com/gzivdo/pikchr-rs"
 keywords = ["pikchr", "diagram", "svg", "pic", "graphics"]
 categories = ["graphics", "parsing", "text-processing"]
 readme = "README.md"
-exclude = ["reference/", "TZ_pikchr_rust_port.md", "tests/corpus/", "tests/golden/"]
+exclude = ["reference/", "TZ_pikchr_rust_port.md"]
 
 [lib]
 name = "pikchr_rs"

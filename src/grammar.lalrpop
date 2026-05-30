@@ -1,22 +1,314 @@
-// P0 grammar: trivial, only validates the LALRPOP <-> external-lexer pipeline.
-// The real Pikchr grammar (~156 rules from pikchr.y, lines 563-795) is ported
-// in P2.
+// Pikchr grammar, ported from pikchr.y (lines 563-795). Semantic actions call
+// methods on the shared `Pik` context, which builds objects and computes
+// geometry as parsing proceeds (matching upstream's Lemon %extra_context).
+//
+// Operator precedence (Lemon %left/%right) is encoded by stratifying the
+// expression rules into Add/Mul/Unary/Atom levels.
 
-use crate::token::Token;
+use crate::pik::{self, Pik, NumProp, BoolProp};
+use crate::obj::{PPoint, PRel};
+use crate::token::{Token, Tok, Kw, AssignOp};
 use crate::error::LexError;
 
-grammar;
+grammar(p: &mut Pik);
 
-// A document is a (possibly empty) list of numbers separated by EOLs.
-pub Document: Vec<f64> = {
-    <ns:(<Num> "eol")*> <last:Num?> => {
-        let mut v = ns;
-        if let Some(n) = last { v.push(n); }
-        v
-    }
+pub Document: () = {
+    StatementList => p.render_top(),
 };
 
-Num: f64 = <n:"num"> => n;
+StatementList: () = {
+    <s:Statement> => p.append_stmt(s),
+    StatementList "eol" <s:Statement> => p.append_stmt(s),
+};
+
+Statement: Option<usize> = {
+    => None,
+    <d:Direction> => { p.set_direction(d); None },
+    <n:Lvalue> <op:Assign> <x:Rvalue> => { p.set_var(&n, x, op); None },
+    <n:"placename"> ":" <x:UnnamedStatement> => { p.elem_setname(x, &n); x },
+    <n:"placename"> ":" <pt:Position> => {
+        let a = p.elem_new(None, None, None);
+        if let Some(i) = a { p.objects[i].pt_at = pt; p.elem_setname(a, &n); }
+        a
+    },
+    <x:UnnamedStatement> => x,
+    "print" PrList => None,
+    "assert" "(" <x:Expr> <op:"eq"> <y:Expr> ")" => p.assert_eq(x, &op, y),
+    "assert" "(" <x:Position> <op:"eq"> <y:Position> ")" => p.position_assert(x, &op, y),
+    "define" <id:"id"> <c:"codeblock"> => { p.add_macro(&id, &c); None },
+};
+
+Lvalue: Tok = {
+    <t:"id"> => t,
+    <t:"fill"> => t,
+    <t:"color"> => t,
+    <t:"thickness"> => t,
+};
+
+Rvalue: f64 = {
+    Expr,
+    <c:"placename"> => p.lookup_color(&c),
+};
+
+// "print" is a debugging aid; parsed but its output is discarded in this port.
+PrList: () = {
+    PrItem => (),
+    PrList PrSep PrItem => (),
+};
+PrItem: () = {
+    "fill" => (),
+    "color" => (),
+    "thickness" => (),
+    Rvalue => (),
+    "str" => (),
+};
+PrSep: () = { "," => () };
+
+UnnamedStatement: Option<usize> = {
+    <x:Basetype> AttributeList => {
+        if let Some(i) = x { Some(p.after_adding_attributes(i)) } else { x }
+    },
+};
+
+Basetype: Option<usize> = {
+    <n:"classname"> => p.elem_new(Some(&n), None, None),
+    <s:"str"> <pos:TextPosition> => {
+        let mut t = s; t.e_code = pos;
+        p.elem_new(None, Some(&t), None)
+    },
+    "lb" <_sv:SaveList> StatementList "rb" => {
+        let sub = p.end_sublist();
+        p.elem_new(None, None, Some(sub))
+    },
+};
+
+SaveList: () = { => p.begin_sublist() };
+
+Direction: i32 = {
+    <t:"up"> => t.e_code,
+    <t:"down"> => t.e_code,
+    <t:"left"> => t.e_code,
+    <t:"right"> => t.e_code,
+};
+
+Relexpr: PRel = {
+    <b:Expr> => PRel { abs: b, rel: 0.0 },
+    <b:Expr> "%" => PRel { abs: 0.0, rel: b / 100.0 },
+};
+OptRelexpr: PRel = {
+    <r:Relexpr> => r,
+    => PRel { abs: 0.0, rel: 1.0 },
+};
+
+AttributeList: () = {
+    <x:Relexpr> AList => p.add_direction(None, None, x),
+    AList => (),
+};
+AList: () = {
+    => (),
+    AList Attribute => (),
+};
+
+Attribute: () = {
+    <pr:NumProperty> <x:Relexpr> => p.set_numprop(pr.0, pr.1, x),
+    <d:DashProperty> <x:Expr> => p.set_dashed(d.0, Some(x)),
+    <d:DashProperty> => p.set_dashed(d.0, None),
+    <c:ColorProperty> <x:Rvalue> => p.set_clrprop(c.0, c.1, x),
+    Go <d:Direction> <x:OptRelexpr> => p.add_direction(Some(d), None, x),
+    Go <d:Direction> Even <pt:Position> => p.evenwith((0,0), pt),
+    <e:"close"> => p.close_path((e.start, e.end)),
+    "chop" => { let i = p.this_obj().unwrap(); p.objects[i].b_chop = true; },
+    <t:"from"> <x:Position> => p.set_from((t.start, t.end), x),
+    <t:"to"> <x:Position> => p.add_to((t.start, t.end), x),
+    <t:"then"> => p.then((t.start, t.end)),
+    <e:"then"> <_d:OptRelexpr> "heading" <_a:Expr> => p.move_hdg((e.start, e.end)),
+    <e:"then"> <_d:OptRelexpr> <_c:"edgept"> => p.move_hdg((e.start, e.end)),
+    <e:"go"> <_d:OptRelexpr> "heading" <_a:Expr> => p.move_hdg((e.start, e.end)),
+    <e:"go"> <_d:OptRelexpr> <_c:"edgept"> => p.move_hdg((e.start, e.end)),
+    BoolProperty => (),
+    <a:"at"> <pt:Position> => p.set_at(None, pt, &a),
+    "with" WithClause => (),
+    <e:"same"> => p.same((e.start, e.end), None),
+    <e:"same"> "as" <x:Object> => p.same((e.start, e.end), x),
+    <t:"str"> <pos:TextPosition> => { let mut tt=t; tt.e_code=pos; p.add_txt(&tt, pos); },
+    <e:"fit"> => p.size_to_fit((e.start, e.end), 3),
+    "behind" <x:Object> => p.behind(x),
+};
+
+Go: () = { "go" => (), => () };
+Even: () = { "until" "even" "with" => (), "even" "with" => () };
+
+WithClause: () = {
+    "dote" <e:Edge> <a:"at"> <pt:Position> => p.set_at(Some(&e), pt, &a),
+    <e:Edge> <a:"at"> <pt:Position> => p.set_at(Some(&e), pt, &a),
+};
+
+NumProperty: (NumProp, (usize, usize)) = {
+    <t:"height"> => (NumProp::Height, (t.start, t.end)),
+    <t:"width"> => (NumProp::Width, (t.start, t.end)),
+    <t:"radius"> => (NumProp::Radius, (t.start, t.end)),
+    <t:"diameter"> => (NumProp::Diameter, (t.start, t.end)),
+    <t:"thickness"> => (NumProp::Thickness, (t.start, t.end)),
+};
+
+DashProperty: (bool, Tok) = {
+    <t:"dotted"> => (true, t),
+    <t:"dashed"> => (false, t),
+};
+
+ColorProperty: (bool, (usize, usize)) = {
+    <t:"fill"> => (true, (t.start, t.end)),
+    <t:"color"> => (false, (t.start, t.end)),
+};
+
+BoolProperty: () = {
+    "cw" => p.set_bool(BoolProp::Cw),
+    "ccw" => p.set_bool(BoolProp::Ccw),
+    "larrow" => p.set_bool(BoolProp::Larrow),
+    "rarrow" => p.set_bool(BoolProp::Rarrow),
+    "lrarrow" => p.set_bool(BoolProp::Lrarrow),
+    "invis" => p.set_bool(BoolProp::Invis),
+    "thick" => p.set_bool(BoolProp::Thick),
+    "thin" => p.set_bool(BoolProp::Thin),
+    "solid" => p.set_bool(BoolProp::Solid),
+};
+
+TextPosition: i32 = {
+    => 0,
+    <b:TextPosition> <f:TextPosKw> => pik::text_position(b, f),
+};
+TextPosKw: Kw = {
+    "center" => Kw::Center,
+    "ljust" => Kw::Ljust,
+    "rjust" => Kw::Rjust,
+    "above" => Kw::Above,
+    "below" => Kw::Below,
+    "italic" => Kw::Italic,
+    "bold" => Kw::Bold,
+    "mono" => Kw::Mono,
+    "aligned" => Kw::Aligned,
+    "big" => Kw::Big,
+    "small" => Kw::Small,
+};
+
+Position: PPoint = {
+    <x:Expr> "," <y:Expr> => PPoint::new(x, y),
+    <p2:Place> => p2,
+    <b:Place> "+" <x:Expr> "," <y:Expr> => PPoint::new(b.x + x, b.y + y),
+    <b:Place> "-" <x:Expr> "," <y:Expr> => PPoint::new(b.x - x, b.y - y),
+    <b:Place> "+" "(" <x:Expr> "," <y:Expr> ")" => PPoint::new(b.x + x, b.y + y),
+    <b:Place> "-" "(" <x:Expr> "," <y:Expr> ")" => PPoint::new(b.x - x, b.y - y),
+    "(" <x:Position> "," <y:Position> ")" => PPoint::new(x.x, y.y),
+    "(" <x:Position> ")" => x,
+    <x:Expr> Between <p1:Position> "and" <p2:Position> => Pik::position_between(x, p1, p2),
+    <x:Expr> "lt" <p1:Position> "," <p2:Position> "gt" => Pik::position_between(x, p1, p2),
+    <x:Expr> "above" <b:Position> => PPoint::new(b.x, b.y + x),
+    <x:Expr> "below" <b:Position> => PPoint::new(b.x, b.y - x),
+    <x:Expr> "left" "of" <b:Position> => PPoint::new(b.x - x, b.y),
+    <x:Expr> "right" "of" <b:Position> => PPoint::new(b.x + x, b.y),
+    <d:Expr> "heading" <e:"edgept"> "of" <pt:Position> => p.position_at_hdg(d, &e, pt),
+    <d:Expr> <e:"edgept"> "of" <pt:Position> => p.position_at_hdg(d, &e, pt),
+    <d:Expr> "heading" <g:Expr> "from" <pt:Position> => Pik::position_at_angle(d, g, pt),
+};
+
+Between: () = {
+    "way" "between" => (),
+    "between" => (),
+    "of" "the" "way" "between" => (),
+};
+
+Place: PPoint = {
+    <p2:Place2> => p2,
+    <x:Edge> "of" <o:Object> => p.place_of_elem(o, Some(&x)),
+};
+Place2: PPoint = {
+    <o:Object> => p.place_of_elem(o, None),
+    <o:Object> "dote" <x:Edge> => p.place_of_elem(o, Some(&x)),
+    <n:Nth> "vertex" "of" <o:Object> => p.nth_vertex(&n, &n, o),
+};
+
+Edge: Tok = {
+    <t:"center"> => t,
+    <t:"edgept"> => t,
+    <t:"top"> => t,
+    <t:"bottom"> => t,
+    <t:"start"> => t,
+    <t:"end"> => t,
+    <t:"right"> => t,
+    <t:"left"> => t,
+};
+
+Object: Option<usize> = {
+    <o:Objectname> => o,
+    <n:Nth> => p.find_nth(None, &n),
+    <n:Nth> OfIn <b:Object> => p.find_nth(b, &n),
+};
+OfIn: () = { "of" => (), "in" => () };
+
+Objectname: Option<usize> = {
+    "this" => p.this_obj(),
+    <n:"placename"> => p.find_byname(None, &n),
+    <b:Objectname> "dotu" <n:"placename"> => p.find_byname(b, &n),
+};
+
+Nth: Tok = {
+    <n:"nth"> <id:"classname"> => { let mut t=id; t.e_code = p.nth_value(&n); t },
+    <n:"nth"> "last" <id:"classname"> => { let mut t=id; t.e_code = -p.nth_value(&n); t },
+    "last" <id:"classname"> => { let mut t=id; t.e_code = -1; t },
+    <id:"last"> => { let mut t=id; t.e_code = -1; t },
+    <n:"nth"> <id:"lb"> "rb" => { let mut t=id; t.e_code = p.nth_value(&n); t },
+    <n:"nth"> "last" <id:"lb"> "rb" => { let mut t=id; t.e_code = -p.nth_value(&n); t },
+    "last" <id:"lb"> "rb" => { let mut t=id; t.e_code = -1; t },
+};
+
+// ---- expression precedence levels --------------------------------------
+
+Expr: f64 = {
+    <a:Expr> "+" <b:MulExpr> => a + b,
+    <a:Expr> "-" <b:MulExpr> => a - b,
+    MulExpr,
+};
+MulExpr: f64 = {
+    <a:MulExpr> "*" <b:UnaryExpr> => a * b,
+    <a:MulExpr> <e:"slash"> <b:UnaryExpr> => {
+        if b == 0.0 { p.error(Some((e.start, e.end)), "division by zero"); 0.0 } else { a / b }
+    },
+    UnaryExpr,
+};
+UnaryExpr: f64 = {
+    "-" <a:UnaryExpr> => -a,
+    "+" <a:UnaryExpr> => a,
+    Atom,
+};
+Atom: f64 = {
+    <n:"num"> => n,
+    "(" <x:Expr> ")" => x,
+    "(" <t:"fill"> ")" => p.get_var(&t),
+    "(" <t:"color"> ")" => p.get_var(&t),
+    "(" <t:"thickness"> ")" => p.get_var(&t),
+    <t:"id"> => p.get_var(&t),
+    <f:"func1"> "(" <x:Expr> ")" => p.func(&f, x, 0.0),
+    <f:"func2"> "(" <x:Expr> "," <y:Expr> ")" => p.func(&f, x, y),
+    "dist" "(" <x:Position> "," <y:Position> ")" => Pik::dist(x, y),
+    <b:Place2> "dotxy" "x" => b.x,
+    <b:Place2> "dotxy" "y" => b.y,
+    <o:Object> "dotl" <pr:NumProperty> => {
+        let name = match pr.0 {
+            NumProp::Height => "height",
+            NumProp::Width => "width",
+            NumProp::Radius => "radius",
+            NumProp::Diameter => "diameter",
+            NumProp::Thickness => "thickness",
+        };
+        let t = Tok::new(name, (pr.1).0, (pr.1).1);
+        p.property_of(o, &t)
+    },
+    <o:Object> "dotl" <d:DashProperty> => p.property_of(o, &d.1),
+    <o:Object> "dotl" <c:ColorProperty> => {
+        let t = Tok::new(if c.0 { "fill" } else { "color" }, c.1.0, c.1.1);
+        p.property_of(o, &t)
+    },
+};
 
 extern {
     type Location = usize;
@@ -24,6 +316,104 @@ extern {
 
     enum Token {
         "num" => Token::Num(<f64>, _),
+        "str" => Token::Str(<Tok>),
+        "id" => Token::Id(<Tok>),
+        "placename" => Token::Placename(<Tok>),
+        "classname" => Token::Classname(<Tok>),
+        "nth" => Token::Nth(<Tok>),
+        "codeblock" => Token::Codeblock(<Tok>),
         "eol" => Token::Eol(_),
+        Assign => Token::Assign(<AssignOp>, _),
+
+        "dote" => Token::DotE(_),
+        "dotu" => Token::DotU(_),
+        "dotl" => Token::DotL(_),
+        "dotxy" => Token::DotXy(_),
+
+        "+" => Token::Plus(_),
+        "-" => Token::Minus(_),
+        "*" => Token::Star(_),
+        "slash" => Token::Slash(<Tok>),
+        "%" => Token::Percent(_),
+        "(" => Token::Lp(_),
+        ")" => Token::Rp(_),
+        "lb" => Token::Lb(<Tok>),
+        "rb" => Token::Rb(_),
+        "," => Token::Comma(_),
+        ":" => Token::Colon(_),
+        "eq" => Token::Eq(<Tok>),
+        "lt" => Token::Lt(_),
+        "gt" => Token::Gt(_),
+        "larrow" => Token::Larrow(_),
+        "rarrow" => Token::Rarrow(_),
+        "lrarrow" => Token::Lrarrow(_),
+
+        "above" => Token::Kw(Kw::Above, <Tok>),
+        "aligned" => Token::Kw(Kw::Aligned, <Tok>),
+        "and" => Token::Kw(Kw::And, <Tok>),
+        "as" => Token::Kw(Kw::As, <Tok>),
+        "assert" => Token::Kw(Kw::Assert, <Tok>),
+        "at" => Token::Kw(Kw::At, <Tok>),
+        "behind" => Token::Kw(Kw::Behind, <Tok>),
+        "below" => Token::Kw(Kw::Below, <Tok>),
+        "between" => Token::Kw(Kw::Between, <Tok>),
+        "big" => Token::Kw(Kw::Big, <Tok>),
+        "bold" => Token::Kw(Kw::Bold, <Tok>),
+        "bottom" => Token::Kw(Kw::Bottom, <Tok>),
+        "ccw" => Token::Kw(Kw::Ccw, <Tok>),
+        "center" => Token::Kw(Kw::Center, <Tok>),
+        "chop" => Token::Kw(Kw::Chop, <Tok>),
+        "close" => Token::Kw(Kw::Close, <Tok>),
+        "color" => Token::Kw(Kw::Color, <Tok>),
+        "cw" => Token::Kw(Kw::Cw, <Tok>),
+        "dashed" => Token::Kw(Kw::Dashed, <Tok>),
+        "define" => Token::Kw(Kw::Define, <Tok>),
+        "diameter" => Token::Kw(Kw::Diameter, <Tok>),
+        "dist" => Token::Kw(Kw::Dist, <Tok>),
+        "dotted" => Token::Kw(Kw::Dotted, <Tok>),
+        "down" => Token::Kw(Kw::Down, <Tok>),
+        "edgept" => Token::Kw(Kw::Edgept, <Tok>),
+        "end" => Token::Kw(Kw::End, <Tok>),
+        "even" => Token::Kw(Kw::Even, <Tok>),
+        "fill" => Token::Kw(Kw::Fill, <Tok>),
+        "fit" => Token::Kw(Kw::Fit, <Tok>),
+        "from" => Token::Kw(Kw::From, <Tok>),
+        "func1" => Token::Kw(Kw::Func1, <Tok>),
+        "func2" => Token::Kw(Kw::Func2, <Tok>),
+        "go" => Token::Kw(Kw::Go, <Tok>),
+        "heading" => Token::Kw(Kw::Heading, <Tok>),
+        "height" => Token::Kw(Kw::Height, <Tok>),
+        "in" => Token::Kw(Kw::In, <Tok>),
+        "invis" => Token::Kw(Kw::Invis, <Tok>),
+        "italic" => Token::Kw(Kw::Italic, <Tok>),
+        "last" => Token::Kw(Kw::Last, <Tok>),
+        "left" => Token::Kw(Kw::Left, <Tok>),
+        "ljust" => Token::Kw(Kw::Ljust, <Tok>),
+        "mono" => Token::Kw(Kw::Mono, <Tok>),
+        "of" => Token::Kw(Kw::Of, <Tok>),
+        "print" => Token::Kw(Kw::Print, <Tok>),
+        "radius" => Token::Kw(Kw::Radius, <Tok>),
+        "right" => Token::Kw(Kw::Right, <Tok>),
+        "rjust" => Token::Kw(Kw::Rjust, <Tok>),
+        "same" => Token::Kw(Kw::Same, <Tok>),
+        "small" => Token::Kw(Kw::Small, <Tok>),
+        "solid" => Token::Kw(Kw::Solid, <Tok>),
+        "start" => Token::Kw(Kw::Start, <Tok>),
+        "the" => Token::Kw(Kw::The, <Tok>),
+        "then" => Token::Kw(Kw::Then, <Tok>),
+        "thick" => Token::Kw(Kw::Thick, <Tok>),
+        "thickness" => Token::Kw(Kw::Thickness, <Tok>),
+        "thin" => Token::Kw(Kw::Thin, <Tok>),
+        "this" => Token::Kw(Kw::This, <Tok>),
+        "to" => Token::Kw(Kw::To, <Tok>),
+        "top" => Token::Kw(Kw::Top, <Tok>),
+        "until" => Token::Kw(Kw::Until, <Tok>),
+        "up" => Token::Kw(Kw::Up, <Tok>),
+        "vertex" => Token::Kw(Kw::Vertex, <Tok>),
+        "way" => Token::Kw(Kw::Way, <Tok>),
+        "width" => Token::Kw(Kw::Width, <Tok>),
+        "with" => Token::Kw(Kw::With, <Tok>),
+        "x" => Token::Kw(Kw::X, <Tok>),
+        "y" => Token::Kw(Kw::Y, <Tok>),
     }
 }
