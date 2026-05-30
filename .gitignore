@@ -3,15 +3,9 @@ Cargo.lock
 **/*.rs.bk
 .DS_Store
 
-# C reference oracle build artifacts (dev-only; pikchr.y is the canon we keep)
-/reference/lemon
-/reference/lemon.c
-/reference/lempar.c
-/reference/pikchr.c
-/reference/pikchr.h
-/reference/pikchr_ref
-/reference/VERSION.h
-/reference/*.out
+# C reference oracle — dev-only, kept locally, not published to the repo.
+# (Upstream pikchr.y is linked from the README.)
+/reference/
 
 # Internal spec — kept locally, not published to the repo
 /TZ_pikchr_rust_port.md

@@ -23,44 +23,32 @@ generated `pikchr.c`. The ~6% grammar rules are ported to
 [LALRPOP](https://github.com/lalrpop/lalrpop); the ~94% C semantics (geometry,
 layout, SVG emission) are hand-ported to Rust.
 
-## Status
+## Features
 
-Under active, incremental construction. Milestones:
+All Pikchr objects render — `box`, `circle`, `ellipse`, `line`, `arrow`,
+`move`, `dot`, `diamond`, `cylinder`, `file`, `oval`, `text` — together with
+directions, `then`-paths, arc/spline curves, auto-fit sizing, rounded boxes,
+arrowheads, colors, dashes/dots, thickness, text with full positioning and
+justification, named labels, `.edge` points, `last`/`Nth`/`Name.Sub`
+references, `from`/`to`/`heading`/`until even with`, `chop`, `at`/`with` edge
+placement, `same [as]`, `[ … ]` sub-blocks, and `define` macros with `$1..$9`
+parameters.
 
-| Milestone | Scope | State |
-|---|---|---|
-| P0 | crate scaffold + lexer→LALRPOP pipeline + harness | ✅ done |
-| P1 | full lexer (numbers/units, strings, names, comments, keywords) | ✅ done |
-| P2 | grammar (LALRPOP) + object model; full grammar wired | ✅ done |
-| P3 | expressions, variables, units, builtins, colors | ✅ done |
-| P4 | basic objects + layout + SVG; **geometry matches C reference** | ✅ done |
-| P5 | positioning & references (`at`/`from`/`to`/`then`/`chop`, `.n`/`.c`, `last`/`2nd`, `same`, sublists) | ✅ done |
-| P6 | arc/spline curves + exact text metrics, vertical layout, `<text>` parity | ✅ done |
-| P7 | containers `[ … ]`, `define` macros (`$1..$9`), `direction` | ✅ done |
-| P8 | full official corpus parity, fuzzing, error parity | ✅ done |
+## Validation
 
-**Parity:** every one of the 96 renderable diagrams in the official Pikchr
-`tests/` suite renders **byte-for-byte identical** to the upstream C reference
-(`tests/p8_official.rs`); 5 of the 6 deliberate error tests are rejected with a
-matching diagnostic (see "Known differences"). Fuzz/robustness tests
-(`tests/p8_fuzz.rs`) throw ~12k random, keyword-salad and corpus-mutation inputs
-at `pikchr()` and confirm it never panics.
+Output is checked **byte-for-byte** against upstream Pikchr: every one of the 96
+renderable diagrams in the official Pikchr `tests/` suite is identical
+(`tests/p8_official.rs`), alongside curated geometry and full-SVG corpora
+(`tests/p4_diff.rs`, `tests/p6_text.rs`). Robustness tests (`tests/p8_fuzz.rs`)
+throw ~12k random, keyword-salad and corpus-mutation inputs at `pikchr()` and
+confirm it never panics. 5 of the 6 deliberate error tests are rejected with a
+matching diagnostic.
 
 ## Known differences
 
 - `tests/test60` (a deliberate macro-redefinition *error* test) is accepted and
   rendered instead of raising the upstream "syntax error"; the divergence is in
   an obscure error path, not in any rendered output.
-
-Output is validated against the upstream C Pikchr: the full official `tests/`
-corpus byte-for-byte (`tests/p8_official.rs`), a 27-case geometry corpus
-(`tests/p4_diff.rs`), and a 26-case full-SVG corpus
-(`tests/p6_text.rs`). `box`, `circle`, `ellipse`, `line`, `arrow`, `move`,
-`dot`, `diamond`, `cylinder`, `file`, `oval`, and `text` render; directions,
-`then`-paths, auto-fit, rounded boxes, arrowheads, colors, dashes/dots,
-thickness, named labels, `.edge` points, `last`/`Nth`/`Name.Sub` references,
-`from`/`to`/`heading`/`until even with`, `chop`, `at`/`with` edge placement,
-`same [as]`, and `[ … ]` sub-blocks are supported.
 
 ## License
 
