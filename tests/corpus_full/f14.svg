@@ -1,0 +1,7 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 184.32 76.32">
+<polygon points="74.16,38.16 62.64,42.48 62.64,33.84" style="fill:rgb(0,0,0)"/>
+<path d="M2.16,38.16L68.4,38.16"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="38.16" y="26.46" text-anchor="middle" fill="rgb(0,0,0)" transform="rotate(-0 38.16,38.16)" dominant-baseline="central">x</text>
+<path d="M74.16,74.16L182.16,74.16L182.16,2.16L74.16,2.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+</svg>
+

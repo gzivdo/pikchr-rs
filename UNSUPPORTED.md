@@ -5,18 +5,17 @@ across the official `tests/` corpus. The port is incremental (milestones P0–P8
 anything deferred is tracked here with a reason. On completion this file should
 be empty.
 
-## Deferred to P6 (object & text fidelity)
-
-- `arc` and curved `spline` rendering (currently straight polylines).
-- Exact text metrics (per-character width table `awChar`) — text auto-fit and
-  bounding boxes use an approximation, so geometry for text-heavy objects may
-  differ from the C reference.
-- Full text vertical layout (`above`/`below`/`center` slotting) and the
-  `fill`/`stroke`/baseline cosmetic attributes on `<text>`.
-
 ## Deferred to P7
 
-- `[ ... ]` sub-blocks beyond basic bounding-box init.
-- `define` macros (text substitution at tokenize time) and `$1..$9` params.
+- `define` macros (text substitution at tokenize time) and `$1..$9` parameters.
+  `add_macro` is currently a no-op and macro invocations are not expanded.
+- `[ ... ]` sub-blocks work for layout/bbox and references, but some advanced
+  container coordinate interactions are still being hardened.
+
+## Deferred to P8
+
+- Running the full official `tests/` corpus under the diff harness.
+- Fuzzing (`cargo-fuzz`) for panic-freedom.
+- Error-message text parity with the C reference.
 
 _Reason: incremental milestone delivery (see `TZ_pikchr_rust_port.md` §5)._

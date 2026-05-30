@@ -25,9 +25,11 @@ pub mod tp {
     pub const LJUST: i32 = 0x0001;
     pub const RJUST: i32 = 0x0002;
     pub const JMASK: i32 = 0x0003;
+    pub const ABOVE2: i32 = 0x0004;
     pub const ABOVE: i32 = 0x0008;
     pub const CENTER: i32 = 0x0010;
     pub const BELOW: i32 = 0x0020;
+    pub const BELOW2: i32 = 0x0040;
     pub const VMASK: i32 = 0x007c;
     pub const BIG: i32 = 0x0100;
     pub const SMALL: i32 = 0x0200;
@@ -75,8 +77,26 @@ pub fn text_position(prev: i32, kw: crate::token::Kw) -> i32 {
 /// Emulate C `printf("%g")` (default precision 6): shortest of %e/%f, trailing
 /// zeros trimmed. Used so SVG numbers match upstream closely.
 pub fn fmt_g(v: f64) -> String {
+    fmt_g_prec(v, 6)
+}
+
+/// `%.10g` — used by `pik_append_num` (rotate angle, font-size %, etc.).
+pub fn fmt_num(v: f64) -> String {
+    fmt_g_prec(v, 10)
+}
+
+/// Emulate C `printf("%.*g", p, v)`.
+pub fn fmt_g_prec(v: f64, mut p: i32) -> String {
+    if p <= 0 {
+        p = 1;
+    }
     if v == 0.0 {
-        return "0".to_string();
+        // Preserve negative zero like C's printf ("-0").
+        return if v.is_sign_negative() {
+            "-0".to_string()
+        } else {
+            "0".to_string()
+        };
     }
     if !v.is_finite() {
         return if v.is_nan() {
@@ -87,7 +107,6 @@ pub fn fmt_g(v: f64) -> String {
             "-inf".to_string()
         };
     }
-    let p: i32 = 6;
     let exp = v.abs().log10().floor() as i32;
     if exp < -4 || exp >= p {
         // %e style with (p-1) digits after the point, trimmed.
@@ -485,19 +504,25 @@ impl Pik {
                 o.rad = rad;
                 o.rarrow = true;
             }
-            Class::Line | Class::Spline => {
+            Class::Line => {
                 let (w, h, rad) = (self.value("linewid"), self.value("lineht"), self.value("linerad"));
                 let o = &mut self.objects[idx];
                 o.w = w;
                 o.h = h;
                 o.rad = rad;
             }
+            Class::Spline => {
+                let (w, h) = (self.value("linewid"), self.value("lineht"));
+                let o = &mut self.objects[idx];
+                o.w = w;
+                o.h = h;
+                o.rad = 1000.0; // splineInit
+            }
             Class::Arc => {
-                let (w, rad) = (self.value("linewid"), self.value("arcrad"));
+                let w = self.value("arcrad");
                 let o = &mut self.objects[idx];
                 o.w = w;
                 o.h = w;
-                o.rad = rad;
             }
             Class::Box => {
                 let (w, h, rad) = (self.value("boxwid"), self.value("boxht"), self.value("boxrad"));
@@ -811,6 +836,40 @@ fn chop_of(o: &PObj, from: PPoint) -> PPoint {
     }
 }
 
+/// `arcControlPoint`: the Bézier control point for an arc from `f` to `t`.
+fn arc_control_point(cw: bool, f: PPoint, t: PPoint) -> PPoint {
+    let mut m = PPoint::new(0.5 * (f.x + t.x), 0.5 * (f.y + t.y));
+    let dx = t.x - f.x;
+    let dy = t.y - f.y;
+    if cw {
+        m.x -= 0.5 * dy;
+        m.y += 0.5 * dx;
+    } else {
+        m.x += 0.5 * dy;
+        m.y -= 0.5 * dx;
+    }
+    m
+}
+
+/// `radiusMidpoint`: point `r` back from `t` toward `f`; flags when `r` had to
+/// be clamped to the midpoint.
+fn radius_midpoint(f: PPoint, t: PPoint, r: f64) -> (PPoint, bool) {
+    let dx = t.x - f.x;
+    let dy = t.y - f.y;
+    let dist = dx.hypot(dy);
+    if dist <= 0.0 {
+        return (t, false);
+    }
+    let dx = dx / dist;
+    let dy = dy / dist;
+    let (r, mid) = if r > 0.5 * dist {
+        (0.5 * dist, true)
+    } else {
+        (r, false)
+    };
+    (PPoint::new(t.x - r * dx, t.y - r * dy), mid)
+}
+
 // ===== direction, exit points, attribute setters ========================
 
 impl Pik {
@@ -1088,7 +1147,7 @@ impl Pik {
         });
     }
 
-    /// `pik_size_to_fit` (approximate text metrics; refined in P6).
+    /// `pik_size_to_fit`: size the object to enclose its text.
     pub fn size_to_fit(&mut self, span: (usize, usize), e_which: i32) {
         let idx = self.cur();
         if self.objects[idx].txt.is_empty() {
@@ -1096,38 +1155,25 @@ impl Pik {
             return;
         }
         self.compute_layout_settings();
-        let (tw, th) = self.text_extent(idx);
+        self.txt_vertical_layout(idx);
+        let mut bbox = PBox::init();
+        self.append_txt_measure(idx, &mut bbox);
+        let at = self.objects[idx].pt_at;
         let alt = self.objects[idx].b_alt_auto_fit;
         let w = if (e_which & 1) != 0 || alt {
-            tw + self.char_width
+            (bbox.ne.x - bbox.sw.x) + self.char_width
         } else {
             0.0
         };
         let h = if (e_which & 2) != 0 || alt {
-            th + 0.5 * self.char_height
+            let h1 = bbox.ne.y - at.y;
+            let h2 = at.y - bbox.sw.y;
+            2.0 * h1.max(h2) + 0.5 * self.char_height
         } else {
             0.0
         };
         self.xfit(idx, w, h);
         self.objects[idx].m_prop |= prop::FIT;
-    }
-
-    /// Approximate text extent (width, height) in inches.
-    fn text_extent(&self, idx: usize) -> (f64, f64) {
-        let o = &self.objects[idx];
-        let n = o.txt.len();
-        if n == 0 {
-            return (0.0, 0.0);
-        }
-        let mut maxw = 0.0_f64;
-        for t in &o.txt {
-            let inner = strip_quotes(&t.text);
-            let chars = decode_text(&inner).chars().count() as f64;
-            let scale = font_scale(t.e_code);
-            maxw = maxw.max(chars * self.char_width * scale);
-        }
-        let h = n as f64 * self.char_height;
-        (maxw, h)
     }
 
     /// `xFit` dispatch.
@@ -1241,21 +1287,6 @@ pub fn strip_quotes(s: &str) -> String {
     }
 }
 
-/// Process backslash escapes in string content (minimal: \" and \\).
-pub fn decode_text(s: &str) -> String {
-    let mut out = String::with_capacity(s.len());
-    let mut chars = s.chars();
-    while let Some(c) = chars.next() {
-        if c == '\\' {
-            if let Some(n) = chars.next() {
-                out.push(n);
-            }
-        } else {
-            out.push(c);
-        }
-    }
-    out
-}
 
 /// Font scale from TP_* flags (`pik_font_scale`).
 fn font_scale(e_code: i32) -> f64 {
@@ -1273,6 +1304,73 @@ fn font_scale(e_code: i32) -> f64 {
         scale *= scale;
     }
     scale
+}
+
+/// Row heights and justification margin for an object's text block.
+#[derive(Default)]
+struct TxtLayout {
+    hc: f64,
+    ha1: f64,
+    ha2: f64,
+    hb1: f64,
+    hb2: f64,
+    jw: f64,
+    ybase: f64,
+}
+
+/// Per-character width estimates (`awChar`), 100 = average. ASCII 0x20..=0x7e.
+const AWCHAR: [u8; 95] = [
+    45, 55, 62, 115, 90, 132, 125, 40, 55, 55, 71, 115, 45, 48, 45, 50, 91, 91, 91, 91, 91, 91, 91,
+    91, 91, 91, 50, 50, 120, 120, 120, 78, 142, 102, 105, 110, 115, 105, 98, 105, 125, 58, 58, 107,
+    95, 145, 125, 115, 95, 115, 107, 95, 97, 118, 102, 150, 100, 93, 100, 58, 50, 58, 119, 72, 72,
+    86, 92, 80, 92, 85, 52, 92, 92, 47, 47, 88, 48, 135, 92, 86, 92, 92, 69, 75, 58, 92, 80, 121,
+    81, 80, 76, 91, 49, 91, 118,
+];
+
+/// `pik_text_length`: 100 * estimated average character width of a string
+/// literal (text includes its surrounding quotes, as in `PToken.z/n`).
+fn text_length(text: &str, mono: bool) -> i32 {
+    let b = text.as_bytes();
+    let n = b.len();
+    let std_avg = 100i32;
+    let mono_avg = 82i32;
+    let mut cnt = 0i32;
+    let mut j = 1usize;
+    while j + 1 < n {
+        let mut c = b[j];
+        if c == b'\\' && b[j + 1] != b'&' {
+            j += 1;
+            c = b[j];
+        } else if c == b'&' {
+            let mut k = j + 1;
+            while k < j + 7 && k < n && b[k] != 0 && b[k] != b';' {
+                k += 1;
+            }
+            if k < n && b[k] == b';' {
+                j = k;
+            }
+            cnt += (if mono { mono_avg } else { std_avg }) * 3 / 2;
+            j += 1;
+            continue;
+        }
+        if c & 0xc0 == 0xc0 {
+            while j + 1 < n - 1 && (b[j + 1] & 0xc0) == 0x80 {
+                j += 1;
+            }
+            cnt += if mono { mono_avg } else { std_avg };
+            j += 1;
+            continue;
+        }
+        if mono {
+            cnt += mono_avg;
+        } else if (0x20..=0x7e).contains(&c) {
+            cnt += AWCHAR[(c - 0x20) as usize] as i32;
+        } else {
+            cnt += std_avg;
+        }
+        j += 1;
+    }
+    cnt
 }
 
 // ===== layout finalizer + render pipeline ===============================
@@ -1349,7 +1447,7 @@ impl Pik {
 
         self.objects[idx].bbox = PBox::init();
 
-        // xCheck: only "dot" has one.
+        // xCheck: "dot" and "arc" have one.
         if class == Class::Dot {
             let (at, rad) = {
                 let o = &self.objects[idx];
@@ -1359,6 +1457,11 @@ impl Pik {
             o.w = 0.0;
             o.h = 0.0;
             o.bbox.add_ellipse(at.x, at.y, rad, rad);
+        } else if class == Class::Arc {
+            self.arc_check(idx);
+            if self.has_err() {
+                return idx;
+            }
         }
 
         if is_line {
@@ -1380,7 +1483,9 @@ impl Pik {
                 o.path = path;
                 o.pt_enter = o.path[0];
                 o.pt_exit = o.path[n - 1];
-                let mut bbox = PBox::init();
+                // Accumulate vertices into the existing bbox (arcCheck may have
+                // already added the curve's extent).
+                let mut bbox = o.bbox;
                 for pt in &o.path {
                     bbox.add_xy(pt.x, pt.y);
                 }
@@ -1628,7 +1733,8 @@ impl Pik {
             Class::Diamond => self.render_diamond(idx),
             Class::File => self.render_file(idx),
             Class::Dot => self.render_dot(idx),
-            Class::Line | Class::Arrow | Class::Spline | Class::Arc => self.render_line(idx),
+            Class::Arc => self.arc_render(idx),
+            Class::Line | Class::Arrow | Class::Spline => self.spline_render(idx),
             Class::Text => self.emit_txt(idx),
             Class::Move | Class::Sublist | Class::Noop => {}
         }
@@ -1897,23 +2003,27 @@ impl Pik {
         self.emit_txt(idx);
     }
 
-    fn render_line(&mut self, idx: usize) {
-        let (sw, larrow, rarrow, b_close, mut path) = {
+    /// `lineRender`: straight polyline through the path points. Arrowheads chop
+    /// the stored path endpoints in place (so aligned text sees the trimmed
+    /// path, matching upstream).
+    fn line_render(&mut self, idx: usize) {
+        let (sw, larrow, rarrow, b_close) = {
             let o = &self.objects[idx];
-            (o.sw, o.larrow, o.rarrow, o.b_close, o.path.clone())
+            (o.sw, o.larrow, o.rarrow, o.b_close)
         };
-        if sw > 0.0 && path.len() >= 2 {
-            let n = path.len();
+        let n = self.objects[idx].path.len();
+        if sw > 0.0 && n >= 2 {
             if larrow {
-                let (a, b) = (path[1], path[0]);
+                let (a, b) = (self.objects[idx].path[1], self.objects[idx].path[0]);
                 let nb = self.draw_arrowhead(idx, a, b);
-                path[0] = nb;
+                self.objects[idx].path[0] = nb;
             }
             if rarrow {
-                let (a, b) = (path[n - 2], path[n - 1]);
+                let (a, b) = (self.objects[idx].path[n - 2], self.objects[idx].path[n - 1]);
                 let nb = self.draw_arrowhead(idx, a, b);
-                path[n - 1] = nb;
+                self.objects[idx].path[n - 1] = nb;
             }
+            let path = self.objects[idx].path.clone();
             let mut z = "<path d=\"M";
             for p in &path {
                 self.append_xy(z, p.x, p.y);
@@ -1930,6 +2040,120 @@ impl Pik {
             self.put("\" />\n");
         }
         self.emit_txt(idx);
+    }
+
+    /// `splineRender`: rounded-corner spline; falls back to a straight line
+    /// when there are fewer than 3 points or no radius (covers line/arrow).
+    fn spline_render(&mut self, idx: usize) {
+        let (sw, rad, larrow, rarrow) = {
+            let o = &self.objects[idx];
+            (o.sw, o.rad, o.larrow, o.rarrow)
+        };
+        if sw > 0.0 {
+            let n = self.objects[idx].path.len();
+            if n < 3 || rad <= 0.0 {
+                self.line_render(idx);
+                return;
+            }
+            if larrow {
+                let (a, b) = (self.objects[idx].path[1], self.objects[idx].path[0]);
+                let nb = self.draw_arrowhead(idx, a, b);
+                self.objects[idx].path[0] = nb;
+            }
+            if rarrow {
+                let (a, b) = (self.objects[idx].path[n - 2], self.objects[idx].path[n - 1]);
+                let nb = self.draw_arrowhead(idx, a, b);
+                self.objects[idx].path[n - 1] = nb;
+            }
+            let path = self.objects[idx].path.clone();
+            self.radius_path(idx, &path, rad);
+        }
+        self.emit_txt(idx);
+    }
+
+    /// `radiusPath`: emit a path that rounds each interior vertex by radius `r`.
+    fn radius_path(&mut self, idx: usize, a: &[PPoint], r: f64) {
+        let n = a.len();
+        let b_close = self.objects[idx].b_close;
+        let i_last = if b_close { n } else { n - 1 };
+        self.append_xy("<path d=\"M", a[0].x, a[0].y);
+        let (m, _) = radius_midpoint(a[0], a[1], r);
+        self.append_xy(" L ", m.x, m.y);
+        let mut an = a[n - 1];
+        for i in 1..i_last {
+            an = if i < n - 1 { a[i + 1] } else { a[0] };
+            let (m, is_mid) = radius_midpoint(an, a[i], r);
+            self.append_xy(" Q ", a[i].x, a[i].y);
+            self.append_xy(" ", m.x, m.y);
+            if !is_mid {
+                let (m2, _) = radius_midpoint(a[i], an, r);
+                self.append_xy(" L ", m2.x, m2.y);
+            }
+        }
+        self.append_xy(" L ", an.x, an.y);
+        if b_close {
+            self.put("Z");
+        } else {
+            self.objects[idx].fill = -1.0;
+        }
+        self.put("\" ");
+        let efill = if b_close { 3 } else { 0 };
+        self.append_style(idx, efill);
+        self.put("\" />\n");
+    }
+
+    /// `arcRender`: a quadratic Bézier from start to end.
+    fn arc_render(&mut self, idx: usize) {
+        let (sw, cw, larrow, rarrow, path) = {
+            let o = &self.objects[idx];
+            (o.sw, o.cw, o.larrow, o.rarrow, o.path.clone())
+        };
+        if path.len() < 2 || sw < 0.0 {
+            self.emit_txt(idx);
+            return;
+        }
+        let mut f = path[0];
+        let mut t = path[1];
+        let m = arc_control_point(cw, f, t);
+        if larrow {
+            f = self.draw_arrowhead(idx, m, f);
+            self.objects[idx].path[0] = f;
+        }
+        if rarrow {
+            t = self.draw_arrowhead(idx, m, t);
+            self.objects[idx].path[1] = t;
+        }
+        self.append_xy("<path d=\"M", f.x, f.y);
+        self.append_xy("Q", m.x, m.y);
+        self.append_xy(" ", t.x, t.y);
+        self.put("\" ");
+        self.append_style(idx, 0);
+        self.put("\" />\n");
+        self.emit_txt(idx);
+    }
+
+    /// `arcCheck`: extend the bbox along the sampled quadratic curve.
+    fn arc_check(&mut self, idx: usize) {
+        if self.n_tpath > 2 {
+            let span = self.objects[idx].err_span;
+            self.error(Some(span), "arc geometry error");
+            return;
+        }
+        let f = self.a_tpath[0];
+        let t = self.a_tpath[1];
+        let cw = self.objects[idx].cw;
+        let sw = self.objects[idx].sw;
+        let m = arc_control_point(cw, f, t);
+        for i in 1..16 {
+            let t1 = 0.0625 * i as f64;
+            let t2 = 1.0 - t1;
+            let a = t2 * t2;
+            let b = 2.0 * t1 * t2;
+            let c = t1 * t1;
+            let x = a * f.x + b * m.x + c * t.x;
+            let y = a * f.y + b * m.y + c * t.y;
+            self.objects[idx].bbox.add_ellipse(x, y, sw, sw);
+        }
     }
 
     /// `pik_draw_arrowhead`: emit the arrowhead polygon and return the new
@@ -1983,64 +2207,302 @@ impl Pik {
 
     // ----- text rendering / measuring (approximate; refined in P6) ------
 
+    /// Measure text into the global bbox (`pik_append_txt` with pBox).
     fn measure_txt(&mut self, idx: usize) {
         if self.objects[idx].txt.is_empty() {
             return;
         }
-        let (tw, th) = self.text_extent(idx);
-        let at = self.objects[idx].pt_at;
-        self.bbox.add_xy(at.x - tw / 2.0, at.y - th / 2.0);
-        self.bbox.add_xy(at.x + tw / 2.0, at.y + th / 2.0);
+        self.txt_vertical_layout(idx);
+        let mut tb = PBox::init();
+        self.append_txt_measure(idx, &mut tb);
+        self.bbox.add_box(&tb);
     }
 
+    /// Compute the per-row heights / justification margin (`pik_append_txt`
+    /// preamble). Assumes `txt_vertical_layout` has already run.
+    fn txt_layout(&self, idx: usize) -> TxtLayout {
+        let o = &self.objects[idx];
+        let sw = if o.sw >= 0.0 { o.sw } else { 0.0 };
+        let mut l = TxtLayout::default();
+        let mut all_mask = 0i32;
+        for t in &o.txt {
+            all_mask |= t.e_code;
+        }
+        if o.class.is_line() {
+            l.hc = sw * 1.5;
+        } else if o.rad > 0.0 && o.class == Class::Cylinder {
+            l.ybase = -0.75 * o.rad;
+        }
+        let cap = |sel: i32| -> f64 {
+            let mut h = 0.0_f64;
+            for t in &o.txt {
+                if t.e_code & sel != 0 {
+                    h = h.max(font_scale(t.e_code) * self.char_height);
+                }
+            }
+            h
+        };
+        if all_mask & tp::CENTER != 0 {
+            for t in &o.txt {
+                if t.e_code & tp::CENTER != 0 {
+                    let s = font_scale(t.e_code) * self.char_height;
+                    if l.hc < s {
+                        l.hc = s;
+                    }
+                }
+            }
+        }
+        if all_mask & tp::ABOVE != 0 {
+            l.ha1 = cap(tp::ABOVE);
+            if all_mask & tp::ABOVE2 != 0 {
+                l.ha2 = cap(tp::ABOVE2);
+            }
+        }
+        if all_mask & tp::BELOW != 0 {
+            l.hb1 = cap(tp::BELOW);
+            if all_mask & tp::BELOW2 != 0 {
+                l.hb2 = cap(tp::BELOW2);
+            }
+        }
+        l.jw = if o.class.e_just() {
+            0.5 * (o.w - 0.5 * (self.char_width + sw))
+        } else {
+            0.0
+        };
+        l
+    }
+
+    /// Per-item base offset (nx, y) relative to the object center, shared by
+    /// the measure and render paths.
+    fn txt_item_offset(&self, l: &TxtLayout, e_code: i32) -> (f64, f64) {
+        let mut nx = 0.0;
+        let mut y = l.ybase;
+        if e_code & tp::ABOVE2 != 0 {
+            y += 0.5 * l.hc + l.ha1 + 0.5 * l.ha2;
+        }
+        if e_code & tp::ABOVE != 0 {
+            y += 0.5 * l.hc + 0.5 * l.ha1;
+        }
+        if e_code & tp::BELOW != 0 {
+            y -= 0.5 * l.hc + 0.5 * l.hb1;
+        }
+        if e_code & tp::BELOW2 != 0 {
+            y -= 0.5 * l.hc + l.hb1 + 0.5 * l.hb2;
+        }
+        if e_code & tp::LJUST != 0 {
+            nx -= l.jw;
+        }
+        if e_code & tp::RJUST != 0 {
+            nx += l.jw;
+        }
+        (nx, y)
+    }
+
+    /// Expand `bbox` to enclose all text of object `idx` (`pik_append_txt`
+    /// measuring branch). This drives auto-fit and the overall canvas size.
+    fn append_txt_measure(&self, idx: usize, bbox: &mut PBox) {
+        let o = &self.objects[idx];
+        if o.txt.is_empty() {
+            return;
+        }
+        let l = self.txt_layout(idx);
+        let x = o.pt_at.x;
+        let orig_y = o.pt_at.y;
+        for t in &o.txt {
+            let xtra = font_scale(t.e_code);
+            let (nx, y) = self.txt_item_offset(&l, t.e_code);
+            let mut cw =
+                text_length(&t.text, t.e_code & tp::MONO != 0) as f64 * self.char_width * xtra * 0.01;
+            let ch = self.char_height * 0.5 * xtra;
+            if (t.e_code & (tp::BOLD | tp::MONO)) == tp::BOLD {
+                cw *= 1.1;
+            }
+            let (mut x0, mut y0, mut x1, mut y1);
+            if t.e_code & tp::RJUST != 0 {
+                x0 = nx;
+                y0 = y - ch;
+                x1 = nx - cw;
+                y1 = y + ch;
+            } else if t.e_code & tp::LJUST != 0 {
+                x0 = nx;
+                y0 = y - ch;
+                x1 = nx + cw;
+                y1 = y + ch;
+            } else {
+                x0 = nx + cw / 2.0;
+                y0 = y + ch;
+                x1 = nx - cw / 2.0;
+                y1 = y - ch;
+            }
+            if t.e_code & tp::ALIGN != 0 && o.path.len() >= 2 {
+                let nn = o.path.len();
+                let dx = o.path[nn - 1].x - o.path[0].x;
+                let dy = o.path[nn - 1].y - o.path[0].y;
+                if dx != 0.0 || dy != 0.0 {
+                    let dist = dx.hypot(dy);
+                    let (dx, dy) = (dx / dist, dy / dist);
+                    let tt = dx * x0 - dy * y0;
+                    y0 = dy * x0 - dx * y0;
+                    x0 = tt;
+                    let tt = dx * x1 - dy * y1;
+                    y1 = dy * x1 - dx * y1;
+                    x1 = tt;
+                }
+            }
+            bbox.add_xy(x + x0, orig_y + y0);
+            bbox.add_xy(x + x1, orig_y + y1);
+        }
+    }
+
+    /// Emit the `<text>` elements for object `idx` (`pik_append_txt` rendering
+    /// branch). Text content/attributes are cosmetic; geometry comes from the
+    /// measuring branch above.
     fn emit_txt(&mut self, idx: usize) {
-        const TP_LJUST: i32 = 0x0001;
-        const TP_RJUST: i32 = 0x0002;
-        const TP_ITALIC: i32 = 0x1000;
-        const TP_BOLD: i32 = 0x2000;
-        const TP_MONO: i32 = 0x4000;
+        if self.objects[idx].txt.is_empty() {
+            return;
+        }
+        self.txt_vertical_layout(idx);
+        let l = self.txt_layout(idx);
         let items = self.objects[idx].txt.clone();
-        let n = items.len();
+        let x = self.objects[idx].pt_at.x;
+        let orig_y = self.objects[idx].pt_at.y;
+        let color = self.objects[idx].color;
+        let font_scale_global = self.font_scale;
+        let path = self.objects[idx].path.clone();
+        for t in &items {
+            let (mut nx, y) = self.txt_item_offset(&l, t.e_code);
+            nx += x;
+            let y = y + orig_y;
+            self.append_x("<text x=\"", nx, "\"");
+            self.append_y(" y=\"", y, "\"");
+            if t.e_code & tp::RJUST != 0 {
+                self.put(" text-anchor=\"end\"");
+            } else if t.e_code & tp::LJUST != 0 {
+                self.put(" text-anchor=\"start\"");
+            } else {
+                self.put(" text-anchor=\"middle\"");
+            }
+            if t.e_code & tp::ITALIC != 0 {
+                self.put(" font-style=\"italic\"");
+            }
+            if t.e_code & tp::BOLD != 0 {
+                self.put(" font-weight=\"bold\"");
+            }
+            if t.e_code & tp::MONO != 0 {
+                self.put(" font-family=\"monospace\"");
+            }
+            if color >= 0.0 {
+                self.append_clr(" fill=\"", color, "\"", false);
+            }
+            let xtra = font_scale(t.e_code) * font_scale_global;
+            if !(0.99..1.01).contains(&xtra) {
+                self.put(&format!(" font-size=\"{}%\"", fmt_num(xtra * 100.0)));
+            }
+            if t.e_code & tp::ALIGN != 0 && path.len() >= 2 {
+                let nn = path.len();
+                let dx = path[nn - 1].x - path[0].x;
+                let dy = path[nn - 1].y - path[0].y;
+                if dx != 0.0 || dy != 0.0 {
+                    let ang = dy.atan2(dx) * -180.0 / std::f64::consts::PI;
+                    self.put(&format!(" transform=\"rotate({}", fmt_num(ang)));
+                    self.append_xy(" ", x, orig_y);
+                    self.put(")\"");
+                }
+            }
+            self.put(" dominant-baseline=\"central\">");
+            let inner = strip_quotes(&t.text);
+            let mut content = String::new();
+            render_text_content(&mut content, inner.as_bytes());
+            self.put(&content);
+            self.put("</text>\n");
+        }
+    }
+
+    /// `pik_txt_vertical_layout`: assign each text item exactly one vertical
+    /// slot (ABOVE2/ABOVE/CENTER/BELOW/BELOW2).
+    fn txt_vertical_layout(&mut self, idx: usize) {
+        let txt = &mut self.objects[idx].txt;
+        let n = txt.len();
         if n == 0 {
             return;
         }
-        let at = self.objects[idx].pt_at;
-        let ch = self.char_height.max(0.0001);
-        for (i, t) in items.iter().enumerate() {
-            let content = xml_escape(&decode_text(&strip_quotes(&t.text)));
-            let scale = font_scale(t.e_code);
-            // Vertical: stack lines top-to-bottom around the center.
-            let y = at.y + ((n as f64 - 1.0) / 2.0 - i as f64) * ch;
-            let (anchor, dx) = if t.e_code & TP_LJUST != 0 {
-                ("start", -self.objects[idx].w * 0.0)
-            } else if t.e_code & TP_RJUST != 0 {
-                ("end", 0.0)
-            } else {
-                ("middle", 0.0)
-            };
-            let x = at.x + dx;
-            let fs = self.r_scale * ch * scale;
-            self.append_x("<text x=\"", x, "\"");
-            // baseline: shift down ~0.35em for vertical centering
-            let yb = y; // approximate baseline at line center
-            self.append_y(" y=\"", yb, "\"");
-            self.put(&format!(" text-anchor=\"{anchor}\""));
-            self.put(&format!(
-                " dominant-baseline=\"central\" font-size=\"{}\"",
-                fmt_g(fs)
-            ));
-            if t.e_code & TP_ITALIC != 0 {
-                self.put(" font-style=\"italic\"");
+        if n == 1 {
+            if txt[0].e_code & tp::VMASK == 0 {
+                txt[0].e_code |= tp::CENTER;
             }
-            if t.e_code & TP_BOLD != 0 {
-                self.put(" font-weight=\"bold\"");
+            return;
+        }
+        // Demote an extra ABOVE to ABOVE2.
+        let mut j = 0;
+        let mut m_just = 0;
+        for i in (0..n).rev() {
+            if txt[i].e_code & tp::ABOVE != 0 {
+                if j == 0 {
+                    j = 1;
+                    m_just = txt[i].e_code & tp::JMASK;
+                } else if j == 1 && m_just != 0 && (txt[i].e_code & m_just) == 0 {
+                    j = 2;
+                } else {
+                    txt[i].e_code = (txt[i].e_code & !tp::VMASK) | tp::ABOVE2;
+                    break;
+                }
             }
-            if t.e_code & TP_MONO != 0 {
-                self.put(" font-family=\"monospace\"");
+        }
+        // Demote an extra BELOW to BELOW2.
+        j = 0;
+        m_just = 0;
+        for i in 0..n {
+            if txt[i].e_code & tp::BELOW != 0 {
+                if j == 0 {
+                    j = 1;
+                    m_just = txt[i].e_code & tp::JMASK;
+                } else if j == 1 && m_just != 0 && (txt[i].e_code & m_just) == 0 {
+                    j = 2;
+                } else {
+                    txt[i].e_code = (txt[i].e_code & !tp::VMASK) | tp::BELOW2;
+                    break;
+                }
             }
-            self.put(">");
-            self.put(&content);
-            self.put("</text>\n");
+        }
+        let mut all_slots = 0;
+        for t in txt.iter() {
+            all_slots |= t.e_code & tp::VMASK;
+        }
+        let mut free = [0i32; 5];
+        let mut islot = 0;
+        if n == 2 && ((txt[0].e_code | txt[1].e_code) & tp::JMASK) == (tp::LJUST | tp::RJUST) {
+            free[0] = tp::CENTER;
+            free[1] = tp::CENTER;
+            islot = 2;
+        } else {
+            if n >= 4 && all_slots & tp::ABOVE2 == 0 {
+                free[islot] = tp::ABOVE2;
+                islot += 1;
+            }
+            if all_slots & tp::ABOVE == 0 {
+                free[islot] = tp::ABOVE;
+                islot += 1;
+            }
+            if n & 1 != 0 {
+                free[islot] = tp::CENTER;
+                islot += 1;
+            }
+            if all_slots & tp::BELOW == 0 {
+                free[islot] = tp::BELOW;
+                islot += 1;
+            }
+            if n >= 4 && all_slots & tp::BELOW2 == 0 {
+                free[islot] = tp::BELOW2;
+                islot += 1;
+            }
+        }
+        let _ = islot;
+        let mut k = 0;
+        for t in txt.iter_mut() {
+            if t.e_code & tp::VMASK == 0 {
+                t.e_code |= free[k];
+                k += 1;
+            }
         }
     }
 
@@ -2540,16 +3002,93 @@ fn hdg_angle(edge: u8) -> f64 {
     }
 }
 
-fn xml_escape(s: &str) -> String {
-    let mut out = String::with_capacity(s.len());
-    for c in s.chars() {
-        match c {
-            '<' => out.push_str("&lt;"),
-            '>' => out.push_str("&gt;"),
-            '&' => out.push_str("&amp;"),
-            '"' => out.push_str("&quot;"),
-            _ => out.push(c),
+/// `pik_isentity`: true if `z` (starting with '&') is a valid HTML entity.
+fn is_entity(z: &[u8]) -> bool {
+    let n = z.len();
+    if n < 4 || z[0] != b'&' {
+        return false;
+    }
+    let body = &z[1..];
+    if body[0] == b'#' {
+        let d = &body[1..];
+        for i in 0..d.len() {
+            if i > 1 && d[i] == b';' {
+                return true;
+            } else if !d[i].is_ascii_digit() {
+                return false;
+            }
+        }
+    } else {
+        for i in 0..body.len() {
+            let c = body[i];
+            if i > 1 && c == b';' {
+                return true;
+            } else if i > 0 && c.is_ascii_digit() {
+                continue;
+            } else if !(c.is_ascii_uppercase() || c.is_ascii_lowercase()) {
+                return false;
+            }
         }
     }
-    out
+    false
+}
+
+/// `pik_append_text` with bQSpace|bQAmp (flags 0x3): escape `<`/`>`, turn
+/// spaces into U+00A0, and `&` into `&amp;` unless it begins a valid entity.
+fn append_text_escaped(out: &mut String, z: &[u8]) {
+    let n = z.len();
+    let mut start = 0;
+    let mut i = 0;
+    let flush = |out: &mut String, seg: &[u8]| {
+        if !seg.is_empty() {
+            out.push_str(std::str::from_utf8(seg).unwrap_or(""));
+        }
+    };
+    while i < n {
+        let c = z[i];
+        if c == b'<' || c == b'>' || c == b' ' || c == b'&' {
+            flush(out, &z[start..i]);
+            match c {
+                b'<' => out.push_str("&lt;"),
+                b'>' => out.push_str("&gt;"),
+                b' ' => out.push('\u{00a0}'),
+                b'&' => {
+                    if is_entity(&z[i..]) {
+                        out.push('&');
+                    } else {
+                        out.push_str("&amp;");
+                    }
+                }
+                _ => {}
+            }
+            start = i + 1;
+        }
+        i += 1;
+    }
+    flush(out, &z[start..n]);
+}
+
+/// Render the inner text of a string token (quotes already stripped),
+/// mirroring the backslash handling of `pik_append_txt`'s render loop.
+fn render_text_content(out: &mut String, z: &[u8]) {
+    let total = z.len() as isize;
+    let mut off = 0usize;
+    let mut nz = total;
+    while nz > 0 {
+        let seg = &z[off..off + nz as usize];
+        let mut j = 0usize;
+        while j < seg.len() && seg[j] != b'\\' {
+            j += 1;
+        }
+        if j > 0 {
+            append_text_escaped(out, &seg[..j]);
+        }
+        if j < seg.len() && (j + 1 == seg.len() || seg[j + 1] == b'\\') {
+            out.push_str("&#92;");
+            j += 1;
+        }
+        let consumed = j + 1;
+        off += consumed;
+        nz -= consumed as isize;
+    }
 }
