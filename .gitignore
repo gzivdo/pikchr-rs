@@ -12,3 +12,6 @@ Cargo.lock
 /reference/pikchr_ref
 /reference/VERSION.h
 /reference/*.out
+
+# Internal spec — kept locally, not published to the repo
+/TZ_pikchr_rust_port.md

@@ -11,7 +11,6 @@ categories = ["graphics", "parsing", "text-processing"]
 readme = "README.md"
 exclude = [
     "reference/",
-    "TZ_pikchr_rust_port.md",
     "tests/official/",
     "tests/corpus/",
     "tests/corpus_full/",

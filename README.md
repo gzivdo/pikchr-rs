@@ -62,8 +62,6 @@ thickness, named labels, `.edge` points, `last`/`Nth`/`Name.Sub` references,
 `from`/`to`/`heading`/`until even with`, `chop`, `at`/`with` edge placement,
 `same [as]`, and `[ … ]` sub-blocks are supported.
 
-See [`UNSUPPORTED.md`](UNSUPPORTED.md) for language constructs not yet covered.
-
 ## License
 
 MIT (see [`LICENSE`](LICENSE)). Original Pikchr is by D. R. Hipp under 0BSD; see
