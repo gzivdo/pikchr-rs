@@ -1,0 +1,35 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 472.32 424.426">
+<path d="M2.16,2.16L2.16,74.16A54 0 0 0 0 110.16 74.16L110.16,2.16A54 0 0 0 0 2.16 2.16A54 0 0 0 0 110.16 2.16"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="56.16" y="38.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">radius 0%</text>
+<path d="M182.16,7.56L182.16,68.76A54 5.4 0 0 0 290.16 68.76L290.16,7.56A54 5.4 0 0 0 182.16 7.56A54 5.4 0 0 0 290.16 7.56"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="236.16" y="42.21" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">radius 50%</text>
+<path d="M362.16,12.96L362.16,63.36A54 10.8 0 0 0 470.16 63.36L470.16,12.96A54 10.8 0 0 0 362.16 12.96A54 10.8 0 0 0 470.16 12.96"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="416.16" y="46.26" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">radius 100%</text>
+<path d="M25.92,102.506L25.92,134.906A30.24 0 0 0 0 86.4 134.906L86.4,102.506A30.24 0 0 0 0 25.92 102.506A30.24 0 0 0 0 86.4 102.506"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="56.16" y="118.706" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">fit 0%</text>
+<path d="M158.4,103.181L158.4,134.231A35.4816 5.4 0 0 0 229.363 134.231L229.363,103.181A35.4816 5.4 0 0 0 158.4 103.181A35.4816 5.4 0 0 0 229.363 103.181"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="193.882" y="122.756" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">fit 50%</text>
+<path d="M301.363,103.856L301.363,133.556A40.7232 10.8 0 0 0 382.81 133.556L382.81,103.856A40.7232 10.8 0 0 0 301.363 103.856A40.7232 10.8 0 0 0 382.81 103.856"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="342.086" y="126.806" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">fit 100%</text>
+<path d="M2.16,176.753L2.16,221.753A54 13.5 0 0 0 110.16 221.753L110.16,176.753A54 13.5 0 0 0 2.16 176.753A54 13.5 0 0 0 110.16 176.753"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="56.16" y="209.378" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">radius 125%</text>
+<path d="M182.16,179.453L182.16,219.053A54 16.2 0 0 0 290.16 219.053L290.16,179.453A54 16.2 0 0 0 182.16 179.453A54 16.2 0 0 0 290.16 179.453"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="236.16" y="211.403" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">radius 150%</text>
+<path d="M362.16,184.853L362.16,213.653A54 21.6 0 0 0 470.16 213.653L470.16,184.853A54 21.6 0 0 0 362.16 184.853A54 21.6 0 0 0 470.16 184.853"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="416.16" y="215.453" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">radius 200%</text>
+<path d="M15.4368,277.099L15.4368,306.124A40.7232 13.5 0 0 0 96.8832 306.124L96.8832,277.099A40.7232 13.5 0 0 0 15.4368 277.099A40.7232 13.5 0 0 0 96.8832 277.099"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="56.16" y="301.737" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">fit 125%</text>
+<path d="M168.883,277.437L168.883,305.787A40.7232 16.2 0 0 0 250.33 305.787L250.33,277.437A40.7232 16.2 0 0 0 168.883 277.437A40.7232 16.2 0 0 0 250.33 277.437"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="209.606" y="303.762" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">fit 150%</text>
+<path d="M322.33,278.112L322.33,305.112A40.7232 21.6 0 0 0 403.776 305.112L403.776,278.112A40.7232 21.6 0 0 0 322.33 278.112A40.7232 21.6 0 0 0 403.776 278.112"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="363.053" y="307.812" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">fit 200%</text>
+<path d="M32.3136,356.611L32.3136,407.011A23.8464 8.64 0 0 0 80.0064 407.011L80.0064,356.611A23.8464 8.64 0 0 0 32.3136 356.611A23.8464 8.64 0 0 0 80.0064 356.611"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="56.16" y="378.211" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">fit</text>
+<text x="56.16" y="398.371" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">80%</text>
+<path d="M152.006,357.151L152.006,406.471A29.088 12.96 0 0 0 210.182 406.471L210.182,357.151A29.088 12.96 0 0 0 152.006 357.151A29.088 12.96 0 0 0 210.182 357.151"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="181.094" y="381.451" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">fit</text>
+<text x="181.094" y="401.611" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">120%</text>
+<path d="M282.182,357.556L282.182,406.066A29.088 16.2 0 0 0 340.358 406.066L340.358,357.556A29.088 16.2 0 0 0 282.182 357.556A29.088 16.2 0 0 0 340.358 357.556"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="311.27" y="383.881" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">fit</text>
+<text x="311.27" y="404.041" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">150%</text>
+</svg>

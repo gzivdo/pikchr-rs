@@ -1,0 +1,14 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 367.315 162.72">
+<path d="M167.155,74.16L275.155,74.16L275.155,2.16L167.155,2.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="221.155" y="38.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">1</text>
+<path d="M77.1552,160.56L185.155,160.56L185.155,88.56L77.1552,88.56Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="131.155" y="124.56" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">2</text>
+<polygon points="257.155,124.56 245.635,128.88 245.635,120.24" style="fill:rgb(0,0,0)"/>
+<path d="M185.155,124.56L251.395,124.56"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="221.155" y="112.86" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">3</text>
+<path d="M257.155,160.56L365.155,160.56L365.155,88.56L257.155,88.56Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="311.155" y="124.56" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">4</text>
+<text x="77.1552" y="124.56" text-anchor="end" fill="rgb(0,0,0)" dominant-baseline="central">Thing 2: </text>
+<circle cx="221.155" cy="74.16" r="2.16" style="fill:rgb(255,0,0);stroke-width:2.16;stroke:rgb(255,0,0);" />
+<circle cx="221.155" cy="88.56" r="2.16" style="fill:rgb(0,0,255);stroke-width:2.16;stroke:rgb(0,0,255);" />
+</svg>

@@ -138,12 +138,16 @@ pub fn lookup(word: &str) -> Option<KwHit> {
 }
 
 /// Returns true if a keyword hit denotes a 2-D place value (used to decide
-/// whether a `.word` is a DOT_E edge access).
+/// whether a `.word` is a DOT_E edge access). Mirrors the upstream condition
+/// `eEdge>0 || eType in {EDGEPT, START, END}` — note `top`, `bottom`, `left`,
+/// `right`, `center` etc. all carry a non-zero corner code.
 pub fn is_edge_like(hit: &KwHit) -> bool {
-    matches!(
-        hit,
-        KwHit::Kw(Kw::Edgept, _, _) | KwHit::Kw(Kw::Start, _, _) | KwHit::Kw(Kw::End, _, _)
-    )
+    match hit {
+        KwHit::Kw(k, _, edge) => {
+            *edge > 0 || matches!(k, Kw::Edgept | Kw::Start | Kw::End)
+        }
+        _ => false,
+    }
 }
 
 /// Returns true if a keyword hit is `x` or `y` (used to decide DOT_XY).

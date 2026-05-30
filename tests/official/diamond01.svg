@@ -1,0 +1,27 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 758.499 407.65">
+<path d="M2.16,121.968L74.16,175.968L146.16,121.968L74.16,67.968Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="74.16" y="121.968" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">First Diamond</text>
+<polygon points="218.16,121.968 206.64,126.288 206.64,117.648" style="fill:rgb(0,0,0)"/>
+<path d="M146.16,121.968L212.4,121.968"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M218.16,121.968L290.16,175.968L362.16,121.968L290.16,67.968Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="290.16" y="111.888" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Above</text>
+<text x="290.16" y="132.048" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Below</text>
+<polygon points="434.16,121.968 422.64,126.288 422.64,117.648" style="fill:rgb(0,0,0)"/>
+<path d="M362.16,121.968L428.4,121.968"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M434.16,121.968L485.309,160.33L536.458,121.968L485.309,83.6064Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="485.309" y="121.968" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Fitted</text>
+<polygon points="290.16,232.661 285.84,221.141 294.48,221.141" style="fill:rgb(0,0,0)"/>
+<path d="M290.16,175.968L290.16,226.901"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M174.941,319.075L290.16,405.49L405.379,319.075L290.16,232.661Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="290.16" y="308.995" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Long string above</text>
+<text x="290.16" y="329.155" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Below1</text>
+<polygon points="477.379,319.075 465.859,323.395 465.859,314.755" style="fill:rgb(0,0,0)"/>
+<path d="M405.379,319.075L471.619,319.075"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M477.379,319.075L560.266,339.797L643.152,319.075L560.266,298.354Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="560.266" y="319.075" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">thin</text>
+<polygon points="649.843,121.968 638.323,126.288 638.323,117.648" style="fill:rgb(0,0,0)"/>
+<path d="M536.458,121.968L644.083,121.968"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M649.843,121.968L703.091,241.776L756.339,121.968L703.091,2.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="703.091" y="111.888" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">tall</text>
+<text x="703.091" y="132.048" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">diamond</text>
+</svg>

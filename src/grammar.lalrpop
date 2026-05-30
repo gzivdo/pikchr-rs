@@ -32,7 +32,7 @@ Statement: Option<usize> = {
         a
     },
     <x:UnnamedStatement> => x,
-    "print" PrList => None,
+    "print" PrList => { p.print_br(); None },
     "assert" "(" <x:Expr> <op:"eq"> <y:Expr> ")" => p.assert_eq(x, &op, y),
     "assert" "(" <x:Position> <op:"eq"> <y:Position> ")" => p.position_assert(x, &op, y),
     "define" <id:"id"> <c:"codeblock"> => { p.add_macro(&id, &c); None },
@@ -56,13 +56,13 @@ PrList: () = {
     PrList PrSep PrItem => (),
 };
 PrItem: () = {
-    "fill" => (),
-    "color" => (),
-    "thickness" => (),
-    Rvalue => (),
-    "str" => (),
+    <t:"fill"> => p.print_num(p.value_of(&t.text)),
+    <t:"color"> => p.print_num(p.value_of(&t.text)),
+    <t:"thickness"> => p.print_num(p.value_of(&t.text)),
+    <x:Rvalue> => p.print_num(x),
+    <s:"str"> => p.print_str(&s),
 };
-PrSep: () = { "," => () };
+PrSep: () = { "," => p.print_sep() };
 
 UnnamedStatement: Option<usize> = {
     <x:Basetype> AttributeList => {
@@ -117,7 +117,7 @@ Attribute: () = {
     Go <d:Direction> <x:OptRelexpr> => p.add_direction(Some(d), None, x),
     Go <d:Direction> Even <pt:Position> => p.evenwith(d, (0,0), pt),
     <e:"close"> => p.close_path((e.start, e.end)),
-    "chop" => { let i = p.this_obj().unwrap(); p.objects[i].b_chop = true; },
+    "chop" => p.set_chop(),
     <t:"from"> <x:Position> => p.set_from((t.start, t.end), x),
     <t:"to"> <x:Position> => p.add_to((t.start, t.end), x),
     <t:"then"> => p.then((t.start, t.end)),
@@ -224,7 +224,7 @@ Place: PPoint = {
 Place2: PPoint = {
     <o:Object> => p.place_of_elem(o, None),
     <o:Object> "dote" <x:Edge> => p.place_of_elem(o, Some(&x)),
-    <n:Nth> "vertex" "of" <o:Object> => p.nth_vertex(&n, &n, o),
+    <n:"nth"> "vertex" "of" <o:Object> => p.nth_vertex(&n, &n, o),
 };
 
 Edge: Tok = {

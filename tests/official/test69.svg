@@ -1,0 +1,24 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 331.139 210.316">
+<path d="M2.16,34.4412L54.5253,34.4412L54.5253,11.4588L2.16,11.4588Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="28.3427" y="22.95" text-anchor="middle" fill="rgb(0,0,0)" font-size="64%" dominant-baseline="central">small*2</text>
+<path d="M61.7253,36.054L109.372,36.054L109.372,9.846L61.7253,9.846Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="85.5487" y="22.95" text-anchor="middle" fill="rgb(0,0,0)" font-size="80%" dominant-baseline="central">small</text>
+<path d="M116.572,38.07L187.535,38.07L187.535,7.83L116.572,7.83Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="152.054" y="22.95" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">normal</text>
+<path d="M194.735,40.59L239.519,40.59L239.519,5.31L194.735,5.31Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="217.127" y="22.95" text-anchor="middle" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">big</text>
+<path d="M246.719,43.74L328.979,43.74L328.979,2.16L246.719,2.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="287.849" y="22.95" text-anchor="middle" fill="rgb(0,0,0)" font-size="156.25%" dominant-baseline="central">big*2</text>
+<path d="M2.16,208.156L119.88,208.156L119.88,64.5158L2.16,64.5158Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="61.02" y="103.677" text-anchor="middle" fill="rgb(0,0,0)" font-size="64%" dominant-baseline="central">very small</text>
+<text x="61.02" y="118.192" text-anchor="middle" fill="rgb(0,0,0)" font-size="80%" dominant-baseline="central">small</text>
+<text x="61.02" y="136.336" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">normal</text>
+<text x="61.02" y="159.016" text-anchor="middle" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">big</text>
+<text x="61.02" y="187.366" text-anchor="middle" fill="rgb(0,0,0)" font-size="156.25%" dominant-baseline="central">very big</text>
+<path d="M191.88,208.156L313.56,208.156L313.56,64.5158L191.88,64.5158Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="252.72" y="85.3058" text-anchor="middle" fill="rgb(0,0,0)" font-size="156.25%" dominant-baseline="central">Very big</text>
+<text x="252.72" y="113.656" text-anchor="middle" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">big</text>
+<text x="252.72" y="136.336" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">normal</text>
+<text x="252.72" y="154.48" text-anchor="middle" fill="rgb(0,0,0)" font-size="80%" dominant-baseline="central">small</text>
+<text x="252.72" y="168.995" text-anchor="middle" fill="rgb(0,0,0)" font-size="64%" dominant-baseline="central">very small</text>
+</svg>

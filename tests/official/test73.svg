@@ -1,0 +1,32 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 472.32 651.852">
+<path d="M2.16,2.16L2.16,74.16A54 0 0 0 0 110.16 74.16L110.16,2.16A54 0 0 0 0 2.16 2.16A54 0 0 0 0 110.16 2.16"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="56.16" y="38.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">rad 0%</text>
+<path d="M182.16,7.56L182.16,68.76A54 5.4 0 0 0 290.16 68.76L290.16,7.56A54 5.4 0 0 0 182.16 7.56A54 5.4 0 0 0 290.16 7.56"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="236.16" y="42.21" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">rad 50%</text>
+<path d="M362.16,12.96L362.16,63.36A54 10.8 0 0 0 470.16 63.36L470.16,12.96A54 10.8 0 0 0 362.16 12.96A54 10.8 0 0 0 470.16 12.96"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="416.16" y="46.26" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">rad 100%</text>
+<path d="M2.16,138.506L2.16,138.506A54 36 0 0 0 110.16 138.506L110.16,138.506A54 36 0 0 0 2.16 138.506A54 36 0 0 0 110.16 138.506"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="56.16" y="181.026" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">rad +1cm</text>
+<path d="M182.16,102.506L182.16,174.506A54 0 0 0 0 290.16 174.506L290.16,102.506A54 0 0 0 0 182.16 102.506A54 0 0 0 0 290.16 102.506"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="236.16" y="138.506" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">rad -1cm</text>
+<path d="M362.16,102.506L362.16,174.506A54 0 0 0 0 470.16 174.506L470.16,102.506A54 0 0 0 0 362.16 102.506A54 0 0 0 0 470.16 102.506"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="416.16" y="138.506" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">rad -10px</text>
+<path d="M25.92,231.199L25.92,263.599A30.24 0 0 0 0 86.4 263.599L86.4,231.199A30.24 0 0 0 0 25.92 231.199A30.24 0 0 0 0 86.4 231.199"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="56.16" y="247.399" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">fit 0%</text>
+<path d="M158.4,233.899L158.4,260.899A40.7232 21.6 0 0 0 239.846 260.899L239.846,233.899A40.7232 21.6 0 0 0 158.4 233.899A40.7232 21.6 0 0 0 239.846 233.899"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="199.123" y="263.599" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">fit 200%</text>
+<path d="M311.846,235.249L311.846,259.549A40.7232 32.4 0 0 0 393.293 259.549L393.293,235.249A40.7232 32.4 0 0 0 311.846 235.249A40.7232 32.4 0 0 0 393.293 235.249"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="352.57" y="271.699" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">fit 300%</text>
+<path d="M15.4368,335.146L15.4368,356.746A40.7232 43.2 0 0 0 96.8832 356.746L96.8832,335.146A40.7232 43.2 0 0 0 15.4368 335.146A40.7232 43.2 0 0 0 96.8832 335.146"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="56.16" y="378.346" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">fit 400%</text>
+<path d="M168.883,331.621L168.883,360.271A44.4672 15 0 0 0 257.818 360.271L257.818,331.621A44.4672 15 0 0 0 168.883 331.621A44.4672 15 0 0 0 257.818 331.621"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="213.35" y="357.196" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">fit +10px</text>
+<path d="M329.818,331.621L329.818,360.271A40.608 0 0 0 0 411.034 360.271L411.034,331.621A40.608 0 0 0 0 329.818 331.621A40.608 0 0 0 0 411.034 331.621"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="370.426" y="345.946" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">fit -10px</text>
+<path d="M10.1952,536.292L10.1952,541.692A45.9648 108 0 0 0 102.125 541.692L102.125,536.292A45.9648 108 0 0 0 10.1952 536.292A45.9648 108 0 0 0 102.125 536.292"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="56.16" y="619.992" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">fit 1000%</text>
+<path d="M174.125,529.879L174.125,548.106A41.6448 56.6929 0 0 0 257.414 548.106L257.414,529.879A41.6448 56.6929 0 0 0 174.125 529.879A41.6448 56.6929 0 0 0 257.414 529.879"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="215.77" y="581.512" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">fit +1cm</text>
+<path d="M329.414,529.879L329.414,548.106A37.7856 0 0 0 0 404.986 548.106L404.986,529.879A37.7856 0 0 0 0 329.414 529.879A37.7856 0 0 0 0 404.986 529.879"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="367.2" y="538.992" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">fit -1cm</text>
+</svg>

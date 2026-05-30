@@ -1,0 +1,10 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 387.173 76.32">
+<path d="M4.32,38.16L85.32,2.16L166.32,38.16L85.32,74.16Z"  style="fill:rgb(255,228,196);stroke-width:2.16;stroke-linejoin:round;stroke:rgb(0,0,0);" />
+<path d="M223.013,38.16 L 276.599,14.3442 Q 304.013,2.16 331.427,14.3442 L 357.599,25.9758 Q 385.013,38.16 357.599,50.3442 L 331.427,61.9758 Q 304.013,74.16 276.599,61.9758 L 250.427,50.3442 L 223.013,38.16Z"  style="fill:rgb(255,228,196);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="85.32" y="28.08" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Pointy</text>
+<text x="85.32" y="48.24" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Diamond</text>
+<text x="304.013" y="28.08" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Rounded</text>
+<text x="304.013" y="48.24" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Diamond</text>
+<circle cx="4.32" cy="38.16" r="2.16" style="fill:rgb(255,0,0);stroke-width:2.16;stroke:rgb(255,0,0);" />
+<circle cx="223.013" cy="38.16" r="2.16" style="fill:rgb(255,0,0);stroke-width:2.16;stroke:rgb(255,0,0);" />
+</svg>

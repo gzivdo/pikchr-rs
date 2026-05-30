@@ -1,0 +1,6 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 265.018 82.0743">
+<path d="M60.5088,77.7543L132.509,77.7543"  style="fill:none;stroke-width:2.16;stroke:rgb(0,128,0);" />
+<circle cx="132.509" cy="77.7543" r="2.16" style="fill:rgb(255,0,0);stroke-width:2.16;stroke:rgb(255,0,0);" />
+<path d="M132.509,77.7543L204.509,77.7543"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,255);" />
+<text x="132.509" y="17.28" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">"dot" object causes no motion</text>
+</svg>

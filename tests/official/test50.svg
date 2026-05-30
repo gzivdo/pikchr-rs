@@ -1,0 +1,16 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 472.32 247.226">
+<path d="M2.16,152.906L110.16,152.906L110.16,80.9065L2.16,80.9065Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="56.16" y="116.906" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">cwal</text>
+<polygon points="110.16,116.906 121.68,112.586 121.68,121.226" style="fill:rgb(0,0,0)"/>
+<path d="M115.92,116.906L182.16,116.906"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M182.16,152.906L290.16,152.906L290.16,80.9065L182.16,80.9065Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="236.16" y="116.906" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">s2</text>
+<polygon points="290.16,116.906 301.68,112.586 301.68,121.226" style="fill:rgb(0,0,0)"/>
+<path d="M295.92,116.906L362.16,116.906"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M362.16,152.906L470.16,152.906L470.16,80.9065L362.16,80.9065Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="416.16" y="116.906" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">client</text>
+<polygon points="56.16,152.906 67.3606,157.998 61.2512,164.107" style="fill:rgb(255,0,0)"/>
+<path d="M416.16,152.906Q236.16,332.906 60.2329,156.979"  style="fill:none;stroke-width:2.16;stroke:rgb(255,0,0);" />
+<text x="236.16" y="17.28" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Red arc is fully visible</text>
+<text x="236.16" y="37.44" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Pikchr forum 2020-09-14</text>
+</svg>

@@ -1,0 +1,11 @@
+abs(-10): 10<br>
+cos(pi/3): 0.5000000155<br>
+int(18.5): 18<br>
+max(5,-18.23): 5<br>
+min(5,-18.23): -18.23<br>
+sin(pi/6): 0.4999999923<br>
+sqrt(16): 4<br>
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 287.785 76.32">
+<path d="M2.16,74.16L285.625,74.16L285.625,2.16L2.16,2.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="143.892" y="38.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Function test</text>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 220.32 133.92">
+<!-- box w=1.5 h=0.2 center=0,0 enter=0,0.1 exit=0,-0.1 down -->
+<path d="M2.16,30.96L218.16,30.96L218.16,2.16L2.16,2.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<!-- move w=0 h=0.15 center=0,-0.175 enter=0,-0.1 exit=0,-0.25 down -->
+<!-- box w=1.5 h=0.2 center=0,-0.35 enter=0,-0.25 exit=0,-0.45 down -->
+<path d="M2.16,81.36L218.16,81.36L218.16,52.56L2.16,52.56Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<!-- move w=0 h=0.15 center=0,-0.525 enter=0,-0.45 exit=0,-0.6 down -->
+<!-- box w=1.5 h=0.2 center=0,-0.7 enter=0,-0.6 exit=0,-0.8 down -->
+<path d="M2.16,131.76L218.16,131.76L218.16,102.96L2.16,102.96Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+</svg>

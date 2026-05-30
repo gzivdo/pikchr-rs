@@ -1,0 +1,7 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 385.286 54.72">
+<path d="M2.16,52.56L246.614,52.56L246.614,2.16L2.16,2.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="124.387" y="17.28" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Testing &#92;backslash&#92; support</text>
+<text x="124.387" y="37.44" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Also "autofit"</text>
+<path d="M318.614,42.48L383.126,42.48L383.126,12.24L318.614,12.24Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="350.87" y="27.36" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">abcftn</text>
+</svg>

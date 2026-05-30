@@ -896,13 +896,24 @@ impl Pik {
         }
     }
 
-    fn cur(&self) -> usize {
-        self.cur.expect("no current object")
+    /// The current object, but only if there is one and no error has occurred.
+    /// Attribute setters use this to no-op after an error — upstream stops
+    /// tokenizing on the first error, but our parser consumes the whole stream.
+    fn guard_cur(&self) -> Option<usize> {
+        if self.has_err() {
+            None
+        } else {
+            self.cur
+        }
     }
 
     /// `pik_param_ok`: verify a property may be set; record it.
     fn param_ok(&mut self, span: (usize, usize), m_this: u32) -> bool {
-        let o = &self.objects[self.cur()];
+        let idx = match self.guard_cur() {
+            Some(i) => i,
+            None => return true,
+        };
+        let o = &self.objects[idx];
         if o.m_prop & m_this != 0 {
             self.error(Some(span), "value is already set");
             return true;
@@ -911,14 +922,13 @@ impl Pik {
             self.error(Some(span), "value already fixed by prior constraints");
             return true;
         }
-        let c = self.cur();
-        self.objects[c].m_prop |= m_this;
+        self.objects[idx].m_prop |= m_this;
         false
     }
 
     /// `pik_set_numprop` for HEIGHT/WIDTH/RADIUS/DIAMETER/THICKNESS.
     pub fn set_numprop(&mut self, kind: NumProp, span: (usize, usize), val: PRel) {
-        let idx = self.cur();
+        let idx = match self.guard_cur() { Some(i) => i, None => return };
         let mask = match kind {
             NumProp::Height => prop::HEIGHT,
             NumProp::Width => prop::WIDTH,
@@ -970,7 +980,7 @@ impl Pik {
 
     /// `pik_set_clrprop`.
     pub fn set_clrprop(&mut self, is_fill: bool, span: (usize, usize), clr: f64) {
-        let idx = self.cur();
+        let idx = match self.guard_cur() { Some(i) => i, None => return };
         let mask = if is_fill { prop::FILL } else { prop::COLOR };
         if self.param_ok(span, mask) {
             return;
@@ -995,7 +1005,7 @@ impl Pik {
     /// `pik_set_dashed` (dotted/dashed; default value = dashwid).
     pub fn set_dashed(&mut self, dotted: bool, val: Option<f64>) {
         let v = val.unwrap_or_else(|| self.value("dashwid"));
-        let o = &mut self.objects[self.cur.unwrap()];
+        let idx = match self.guard_cur() { Some(i) => i, None => return }; let o = &mut self.objects[idx];
         if dotted {
             o.dotted = v;
             o.dashed = 0.0;
@@ -1012,7 +1022,7 @@ impl Pik {
         } else {
             0.0
         };
-        let o = &mut self.objects[self.cur.unwrap()];
+        let idx = match self.guard_cur() { Some(i) => i, None => return }; let o = &mut self.objects[idx];
         match b {
             BoolProp::Cw => o.cw = true,
             BoolProp::Ccw => o.cw = false,
@@ -1040,7 +1050,7 @@ impl Pik {
     }
 
     pub fn close_path(&mut self, span: (usize, usize)) {
-        let idx = self.cur();
+        let idx = match self.guard_cur() { Some(i) => i, None => return };
         if self.objects[idx].class.is_line() {
             self.objects[idx].b_close = true;
         } else {
@@ -1071,7 +1081,7 @@ impl Pik {
 
     /// `pik_then`.
     pub fn then(&mut self, span: (usize, usize)) {
-        let idx = self.cur();
+        let idx = match self.guard_cur() { Some(i) => i, None => return };
         if !self.objects[idx].class.is_line() {
             self.error(Some(span), "use with line-oriented objects only");
             return;
@@ -1086,7 +1096,7 @@ impl Pik {
 
     /// `pik_add_direction`: "up 0.5", "left 3", "down", a bare distance, etc.
     pub fn add_direction(&mut self, pdir: Option<i32>, span: Option<(usize, usize)>, val: PRel) {
-        let idx = self.cur();
+        let idx = match self.guard_cur() { Some(i) => i, None => return };
         if !self.objects[idx].class.is_line() {
             self.error(span, "use with line-oriented objects only");
             return;
@@ -1137,7 +1147,7 @@ impl Pik {
 
     /// `pik_add_txt`: attach a string literal as a text item.
     pub fn add_txt(&mut self, s: &Tok, e_code: i32) {
-        let o = &mut self.objects[self.cur.unwrap()];
+        let idx = match self.guard_cur() { Some(i) => i, None => return }; let o = &mut self.objects[idx];
         if o.txt.len() >= 5 {
             return;
         }
@@ -1149,7 +1159,7 @@ impl Pik {
 
     /// `pik_size_to_fit`: size the object to enclose its text.
     pub fn size_to_fit(&mut self, span: (usize, usize), e_which: i32) {
-        let idx = self.cur();
+        let idx = match self.guard_cur() { Some(i) => i, None => return };
         if self.objects[idx].txt.is_empty() {
             self.error(Some(span), "no text to fit to");
             return;
@@ -1618,6 +1628,11 @@ impl Pik {
         if self.has_err() {
             return;
         }
+        // An empty top-level list emits nothing; pikchr() then returns the
+        // "empty diagram" comment (matching upstream's zOut==0 check).
+        if list.is_empty() {
+            return;
+        }
         self.compute_layout_settings();
         let mut thickness = self.value("thickness");
         if thickness <= 0.01 {
@@ -1695,8 +1710,53 @@ impl Pik {
         }
     }
 
+    /// `pik_elem_render`: a `<!-- ... -->` diagnostic comment per object,
+    /// emitted when the (undocumented) `debug = 1` variable is set.
+    fn elem_render(&mut self, idx: usize) {
+        let o = &self.objects[idx];
+        let (name, class, w, h, at, enter, exit, out_dir, ntxt, txt0) = (
+            o.name.clone(),
+            o.class.name(),
+            o.w,
+            o.h,
+            o.pt_at,
+            o.pt_enter,
+            o.pt_exit,
+            o.out_dir,
+            o.txt.len(),
+            o.txt.first().map(|t| strip_quotes(&t.text)),
+        );
+        self.put("<!-- ");
+        if let Some(n) = name {
+            self.put(&escape_text(n.as_bytes(), false, false));
+            self.put(": ");
+        }
+        self.put(&escape_text(class.as_bytes(), false, false));
+        if ntxt > 0 {
+            self.put(" \"");
+            if let Some(t) = txt0 {
+                self.put(&escape_text(t.as_bytes(), true, false));
+            }
+            self.put("\"");
+        }
+        self.put(&format!(" w={}", fmt_num(w)));
+        self.put(&format!(" h={}", fmt_num(h)));
+        self.put(&format!(" center={},{}", fmt_num(at.x), fmt_num(at.y)));
+        self.put(&format!(" enter={},{}", fmt_num(enter.x), fmt_num(enter.y)));
+        let zdir = match out_dir {
+            dir::LEFT => " left",
+            dir::UP => " up",
+            dir::DOWN => " down",
+            _ => " right",
+        };
+        self.put(&format!(" exit={},{}", fmt_num(exit.x), fmt_num(exit.y)));
+        self.put(zdir);
+        self.put(" -->\n");
+    }
+
     /// `pik_elist_render`: render objects, honoring layers.
     fn elist_render(&mut self, list: &[usize]) {
+        let m_debug = value::pik_round(self.value("debug"));
         let mut next_layer = 0i32;
         loop {
             let mut more = false;
@@ -1713,6 +1773,9 @@ impl Pik {
                 } else if layer < this_layer {
                     continue;
                 }
+                if m_debug & 1 != 0 {
+                    self.elem_render(idx);
+                }
                 self.render_obj(idx);
                 if let Some(sub) = self.objects[idx].sublist.clone() {
                     self.elist_render(&sub);
@@ -1722,6 +1785,36 @@ impl Pik {
                 break;
             }
         }
+        // Optional debug labels: a colored dot + name at each named object.
+        let (cl, miss) = self.value_miss("debug_label_color");
+        if !miss && cl >= 0.0 {
+            for &idx in list {
+                if let Some(name) = self.objects[idx].name.clone() {
+                    let at = self.objects[idx].pt_at;
+                    self.render_label_dot(at, &name, cl);
+                }
+            }
+        }
+    }
+
+    /// Render one debug label: a small filled dot with the object's name above
+    /// it (mirrors the `debug_label_color` path of `pik_elist_render`).
+    fn render_label_dot(&mut self, at: PPoint, name: &str, cl: f64) {
+        let mut dot = PObj::blank(Class::Dot);
+        dot.rad = 0.015;
+        dot.sw = 0.015;
+        dot.fill = cl;
+        dot.color = cl;
+        dot.pt_at = at;
+        dot.txt.push(PText {
+            // Upstream uses the bare name (no quotes) as the text token.
+            text: name.to_string(),
+            e_code: tp::ABOVE,
+        });
+        let idx = self.objects.len();
+        self.objects.push(dot);
+        self.render_dot(idx);
+        self.objects.pop();
     }
 
     fn render_obj(&mut self, idx: usize) {
@@ -2639,6 +2732,13 @@ impl Pik {
         self.cur
     }
 
+    /// `chop` attribute.
+    pub fn set_chop(&mut self) {
+        if let Some(idx) = self.guard_cur() {
+            self.objects[idx].b_chop = true;
+        }
+    }
+
     /// `pik_last_ref_object`: the last referenced object iff centered at `pt`.
     fn last_ref_object(&mut self, pt: PPoint) -> Option<usize> {
         let res = self.last_ref.filter(|&i| {
@@ -2651,7 +2751,7 @@ impl Pik {
 
     /// `pik_set_at`.
     pub fn set_at(&mut self, edge: Option<&Tok>, at_pt: PPoint, err: &Tok) {
-        let idx = self.cur();
+        let idx = match self.guard_cur() { Some(i) => i, None => return };
         if self.objects[idx].class.is_line() {
             self.error(
                 Some((err.start, err.end)),
@@ -2682,7 +2782,7 @@ impl Pik {
 
     /// `pik_set_from`.
     pub fn set_from(&mut self, span: (usize, usize), pt: PPoint) {
-        let idx = self.cur();
+        let idx = match self.guard_cur() { Some(i) => i, None => return };
         if !self.objects[idx].class.is_line() {
             self.error(Some(span), "use \"at\" to position this object");
             return;
@@ -2712,7 +2812,7 @@ impl Pik {
 
     /// `pik_add_to`.
     pub fn add_to(&mut self, span: (usize, usize), pt: PPoint) {
-        let idx = self.cur();
+        let idx = match self.guard_cur() { Some(i) => i, None => return };
         if !self.objects[idx].class.is_line() {
             self.error(Some(span), "use \"at\" to position this object");
             return;
@@ -2740,7 +2840,7 @@ impl Pik {
         edge: Option<u8>,
         span: (usize, usize),
     ) {
-        let idx = self.cur();
+        let idx = match self.guard_cur() { Some(i) => i, None => return };
         let r_dist = dist.abs + self.value("linewid") * dist.rel;
         if !self.objects[idx].class.is_line() {
             self.error(Some(span), "use with line-oriented objects only");
@@ -2780,7 +2880,7 @@ impl Pik {
 
     /// `pik_evenwith`: "DIR until even with POSITION".
     pub fn evenwith(&mut self, d: i32, span: (usize, usize), place: PPoint) {
-        let idx = self.cur();
+        let idx = match self.guard_cur() { Some(i) => i, None => return };
         if !self.objects[idx].class.is_line() {
             self.error(Some(span), "use with line-oriented objects only");
             return;
@@ -2813,7 +2913,7 @@ impl Pik {
 
     /// `pik_same` / `same as`.
     pub fn same(&mut self, span: (usize, usize), other: Option<usize>) {
-        let idx = self.cur();
+        let idx = match self.guard_cur() { Some(i) => i, None => return };
         let class = self.objects[idx].class;
         let other = match other {
             Some(o) => o,
@@ -2866,7 +2966,7 @@ impl Pik {
     /// `pik_behind`.
     pub fn behind(&mut self, other: Option<usize>) {
         if let Some(o) = other {
-            let idx = self.cur();
+            let idx = match self.guard_cur() { Some(i) => i, None => return };
             let ol = self.objects[o].i_layer;
             if self.objects[idx].i_layer >= ol {
                 self.objects[idx].i_layer = ol - 1;
@@ -2944,9 +3044,40 @@ impl Pik {
         None
     }
     pub fn add_macro(&mut self, _id: &Tok, _code: &Tok) {
-        // Macro expansion happens at tokenize time (milestone P7).
+        // Macro expansion happens at tokenize time (the `define` statement is
+        // otherwise a no-op here).
     }
-    pub fn print_text(&mut self, _s: &str) {}
+
+    // ----- print (diagnostic output prepended to the result) ------------
+
+    /// `pritem ::= rvalue` etc: append a number (`pik_append_num`, %.10g).
+    pub fn print_num(&mut self, v: f64) {
+        self.out.push_str(&fmt_num(v));
+    }
+    /// `pritem ::= STRING`: append string contents, escaping only `<`/`>`
+    /// (`pik_append_text` with flags 0).
+    pub fn print_str(&mut self, s: &Tok) {
+        let inner = strip_quotes(&s.text);
+        for c in inner.chars() {
+            match c {
+                '<' => self.out.push_str("&lt;"),
+                '>' => self.out.push_str("&gt;"),
+                other => self.out.push(other),
+            }
+        }
+    }
+    /// `prsep ::= COMMA`: a single separating space.
+    pub fn print_sep(&mut self) {
+        self.out.push(' ');
+    }
+    /// End of a `print` statement.
+    pub fn print_br(&mut self) {
+        self.out.push_str("<br>\n");
+    }
+    /// Value of a builtin name (for `print fill` / `color` / `thickness`).
+    pub fn value_of(&self, name: &str) -> f64 {
+        self.value(name)
+    }
 
     pub fn finish(self) -> String {
         self.out
@@ -3033,9 +3164,9 @@ fn is_entity(z: &[u8]) -> bool {
     false
 }
 
-/// `pik_append_text` with bQSpace|bQAmp (flags 0x3): escape `<`/`>`, turn
-/// spaces into U+00A0, and `&` into `&amp;` unless it begins a valid entity.
-fn append_text_escaped(out: &mut String, z: &[u8]) {
+/// `pik_append_text`: always escape `<`/`>`; with `b_space` turn spaces into
+/// U+00A0; with `b_amp` turn `&` into `&amp;` unless it begins a valid entity.
+fn append_text_escaped(out: &mut String, z: &[u8], b_space: bool, b_amp: bool) {
     let n = z.len();
     let mut start = 0;
     let mut i = 0;
@@ -3046,7 +3177,8 @@ fn append_text_escaped(out: &mut String, z: &[u8]) {
     };
     while i < n {
         let c = z[i];
-        if c == b'<' || c == b'>' || c == b' ' || c == b'&' {
+        let is_break = c == b'<' || c == b'>' || (c == b' ' && b_space) || (c == b'&' && b_amp);
+        if is_break {
             flush(out, &z[start..i]);
             match c {
                 b'<' => out.push_str("&lt;"),
@@ -3068,6 +3200,13 @@ fn append_text_escaped(out: &mut String, z: &[u8]) {
     flush(out, &z[start..n]);
 }
 
+/// `pik_append_text` as a standalone string, for the given flags.
+fn escape_text(z: &[u8], b_space: bool, b_amp: bool) -> String {
+    let mut s = String::new();
+    append_text_escaped(&mut s, z, b_space, b_amp);
+    s
+}
+
 /// Render the inner text of a string token (quotes already stripped),
 /// mirroring the backslash handling of `pik_append_txt`'s render loop.
 fn render_text_content(out: &mut String, z: &[u8]) {
@@ -3081,7 +3220,7 @@ fn render_text_content(out: &mut String, z: &[u8]) {
             j += 1;
         }
         if j > 0 {
-            append_text_escaped(out, &seg[..j]);
+            append_text_escaped(out, &seg[..j], true, true);
         }
         if j < seg.len() && (j + 1 == seg.len() || seg[j + 1] == b'\\') {
             out.push_str("&#92;");

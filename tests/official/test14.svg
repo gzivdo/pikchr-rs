@@ -1,0 +1,32 @@
+1in= 1<br>
+1cm= 0.3937007874<br>
+1mm= 0.03937007874<br>
+1pt= 0.01388888889<br>
+1px= 0.01041666667<br>
+1pc= 0.1666666667<br>
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' width="433" height="109" viewBox="0 0 1732.32 436.32">
+<circle cx="146.16" cy="146.16" r="144"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="146.16" y="146.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">in</text>
+<circle cx="434.16" cy="146.16" r="144"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="434.16" y="146.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">cm</text>
+<circle cx="722.16" cy="146.16" r="144"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="722.16" y="146.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">mm</text>
+<circle cx="1010.16" cy="146.16" r="144"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="1010.16" y="146.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">pt</text>
+<circle cx="1298.16" cy="146.16" r="144"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="1298.16" y="146.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">px</text>
+<circle cx="1586.16" cy="146.16" r="144"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="1586.16" y="146.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">pc</text>
+<circle cx="146.16" cy="362.16" r="72"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="146.16" y="362.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">in</text>
+<circle cx="290.16" cy="362.16" r="72"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="290.16" y="362.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">cm</text>
+<circle cx="434.16" cy="362.16" r="72"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="434.16" y="362.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">mm</text>
+<circle cx="578.16" cy="362.16" r="72"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="578.16" y="362.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">pt</text>
+<circle cx="722.16" cy="362.16" r="72"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="722.16" y="362.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">px</text>
+<circle cx="866.16" cy="362.16" r="72"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="866.16" y="362.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">pc</text>
+</svg>

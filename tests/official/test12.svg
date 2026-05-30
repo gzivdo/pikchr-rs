@@ -1,0 +1,14 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 220.32 321.12">
+<circle cx="38.16" cy="38.16" r="36"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="38.16" y="38.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">One</text>
+<polygon points="146.16,38.16 134.64,42.48 134.64,33.84" style="fill:rgb(0,0,0)"/>
+<path d="M74.16,38.16L140.4,38.16"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="182.16" cy="38.16" r="36"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="182.16" y="38.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Two</text>
+<polygon points="182.16,102.96 177.84,91.44 186.48,91.44" style="fill:rgb(0,0,0)"/>
+<path d="M182.16,74.16L182.16,97.2"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="182.16" cy="138.96" r="36"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="182.16" y="138.96" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Three</text>
+<circle cx="182.16" cy="282.96" r="36"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="182.16" y="282.96" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Four</text>
+</svg>

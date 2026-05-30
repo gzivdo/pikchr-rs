@@ -1,0 +1,66 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 816.653 473.04">
+<path d="M2.16,72.72L114.84,72.72L114.84,2.16L2.16,2.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="5.58" y="17.28" text-anchor="start" fill="rgb(0,0,0)" dominant-baseline="central">left</text>
+<text x="58.5" y="37.44" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">normal text</text>
+<text x="111.42" y="57.6" text-anchor="end" fill="rgb(0,0,0)" dominant-baseline="central">right</text>
+<path d="M114.84,72.72L227.52,72.72L227.52,2.16L114.84,2.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="118.26" y="17.28" text-anchor="start" font-style="italic" fill="rgb(0,0,0)" dominant-baseline="central">left</text>
+<text x="171.18" y="37.44" text-anchor="middle" font-style="italic" fill="rgb(0,0,0)" dominant-baseline="central">italic text</text>
+<text x="224.1" y="57.6" text-anchor="end" font-style="italic" fill="rgb(0,0,0)" dominant-baseline="central">right</text>
+<path d="M227.52,72.72L340.2,72.72L340.2,2.16L227.52,2.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="230.94" y="17.28" text-anchor="start" font-weight="bold" fill="rgb(0,0,0)" dominant-baseline="central">left</text>
+<text x="283.86" y="37.44" text-anchor="middle" font-weight="bold" fill="rgb(0,0,0)" dominant-baseline="central">bold text</text>
+<text x="336.78" y="57.6" text-anchor="end" font-weight="bold" fill="rgb(0,0,0)" dominant-baseline="central">right</text>
+<path d="M340.2,72.72L483.97,72.72L483.97,2.16L340.2,2.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="343.62" y="17.28" text-anchor="start" font-family="monospace" fill="rgb(0,0,0)" dominant-baseline="central">left</text>
+<text x="412.085" y="37.44" text-anchor="middle" font-family="monospace" fill="rgb(0,0,0)" dominant-baseline="central">monospace text</text>
+<text x="480.55" y="57.6" text-anchor="end" font-family="monospace" fill="rgb(0,0,0)" dominant-baseline="central">right</text>
+<path d="M2.16,143.28L147.496,143.28L147.496,72.72L2.16,72.72Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="5.58" y="87.84" text-anchor="start" font-style="italic" font-weight="bold" fill="rgb(0,0,0)" dominant-baseline="central">left</text>
+<text x="74.8282" y="108" text-anchor="middle" font-style="italic" font-weight="bold" fill="rgb(0,0,0)" dominant-baseline="central">bold italic text</text>
+<text x="144.076" y="128.16" text-anchor="end" font-style="italic" font-weight="bold" fill="rgb(0,0,0)" dominant-baseline="central">right</text>
+<path d="M147.496,143.28L338.498,143.28L338.498,72.72L147.496,72.72Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="150.916" y="87.84" text-anchor="start" font-weight="bold" font-family="monospace" fill="rgb(0,0,0)" dominant-baseline="central">left</text>
+<text x="242.997" y="108" text-anchor="middle" font-weight="bold" font-family="monospace" fill="rgb(0,0,0)" dominant-baseline="central">bold monospace text</text>
+<text x="335.078" y="128.16" text-anchor="end" font-weight="bold" font-family="monospace" fill="rgb(0,0,0)" dominant-baseline="central">right</text>
+<path d="M338.498,143.28L548.392,143.28L548.392,72.72L338.498,72.72Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="341.918" y="87.84" text-anchor="start" font-style="italic" font-family="monospace" fill="rgb(0,0,0)" dominant-baseline="central">left</text>
+<text x="443.445" y="108" text-anchor="middle" font-style="italic" font-family="monospace" fill="rgb(0,0,0)" dominant-baseline="central">italic monospace text</text>
+<text x="544.972" y="128.16" text-anchor="end" font-style="italic" font-family="monospace" fill="rgb(0,0,0)" dominant-baseline="central">right</text>
+<path d="M2.16,213.84L164.822,213.84L164.822,143.28L2.16,143.28Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="5.58" y="158.4" text-anchor="start" font-style="italic" font-weight="bold" font-family="monospace" fill="rgb(0,0,0)" dominant-baseline="central">left</text>
+<text x="83.4912" y="178.56" text-anchor="middle" font-style="italic" font-weight="bold" font-family="monospace" fill="rgb(0,0,0)" dominant-baseline="central">bold italic text</text>
+<text x="161.402" y="198.72" text-anchor="end" font-style="italic" font-weight="bold" font-family="monospace" fill="rgb(0,0,0)" dominant-baseline="central">right</text>
+<path d="M2.16,299.52L174.816,299.52L174.816,213.84L2.16,213.84Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="5.58" y="231.48" text-anchor="start" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">left</text>
+<text x="88.488" y="256.68" text-anchor="middle" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">normal big text</text>
+<text x="171.396" y="281.88" text-anchor="end" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">right</text>
+<path d="M174.816,299.52L325.872,299.52L325.872,213.84L174.816,213.84Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="178.236" y="231.48" text-anchor="start" font-style="italic" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">left</text>
+<text x="250.344" y="256.68" text-anchor="middle" font-style="italic" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">big italic text</text>
+<text x="322.452" y="281.88" text-anchor="end" font-style="italic" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">right</text>
+<path d="M325.872,299.52L483.278,299.52L483.278,213.84L325.872,213.84Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="329.292" y="231.48" text-anchor="start" font-weight="bold" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">left</text>
+<text x="404.575" y="256.68" text-anchor="middle" font-weight="bold" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">big bold text</text>
+<text x="479.858" y="281.88" text-anchor="end" font-weight="bold" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">right</text>
+<path d="M483.278,299.52L707.342,299.52L707.342,213.84L483.278,213.84Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="486.698" y="231.48" text-anchor="start" font-family="monospace" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">left</text>
+<text x="595.31" y="256.68" text-anchor="middle" font-family="monospace" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">big monospace text</text>
+<text x="703.922" y="281.88" text-anchor="end" font-family="monospace" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">right</text>
+<path d="M2.16,385.2L224.669,385.2L224.669,299.52L2.16,299.52Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="5.58" y="317.16" text-anchor="start" font-style="italic" font-weight="bold" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">left</text>
+<text x="113.414" y="342.36" text-anchor="middle" font-style="italic" font-weight="bold" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">big bold italic text</text>
+<text x="221.249" y="367.56" text-anchor="end" font-style="italic" font-weight="bold" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">right</text>
+<path d="M224.669,385.2L507.773,385.2L507.773,299.52L224.669,299.52Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="228.089" y="317.16" text-anchor="start" font-weight="bold" font-family="monospace" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">left</text>
+<text x="366.221" y="342.36" text-anchor="middle" font-weight="bold" font-family="monospace" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">big bold monospace text</text>
+<text x="504.353" y="367.56" text-anchor="end" font-weight="bold" font-family="monospace" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">right</text>
+<path d="M507.773,385.2L814.493,385.2L814.493,299.52L507.773,299.52Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="511.193" y="317.16" text-anchor="start" font-style="italic" font-family="monospace" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">left</text>
+<text x="661.133" y="342.36" text-anchor="middle" font-style="italic" font-family="monospace" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">big italic monospace text</text>
+<text x="811.073" y="367.56" text-anchor="end" font-style="italic" font-family="monospace" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">right</text>
+<path d="M2.16,470.88L308.88,470.88L308.88,385.2L2.16,385.2Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="5.58" y="402.84" text-anchor="start" font-style="italic" font-weight="bold" font-family="monospace" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">left</text>
+<text x="155.52" y="428.04" text-anchor="middle" font-style="italic" font-weight="bold" font-family="monospace" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">big bold italic mono text</text>
+<text x="305.46" y="453.24" text-anchor="end" font-style="italic" font-weight="bold" font-family="monospace" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">right</text>
+</svg>

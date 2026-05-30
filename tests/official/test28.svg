@@ -1,0 +1,32 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 400.32 364.32">
+<path d="M2.16,218.16L110.16,218.16L110.16,146.16L2.16,146.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="56.16" y="182.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Box</text>
+<polygon points="182.16,182.16 170.64,186.48 170.64,177.84" style="fill:rgb(0,0,0)"/>
+<path d="M110.16,182.16L176.4,182.16"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M182.16,156.96L182.16,207.36A54 10.8 0 0 0 290.16 207.36L290.16,156.96A54 10.8 0 0 0 182.16 156.96A54 10.8 0 0 0 290.16 156.96"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="236.16" y="190.26" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">One</text>
+<polygon points="236.16,290.16 231.84,278.64 240.48,278.64" style="fill:rgb(0,0,0)"/>
+<path d="M236.16,218.16L236.16,284.4"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<ellipse cx="236.16" cy="326.16" rx="54" ry="36"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="236.16" y="326.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Ellipse</text>
+<polygon points="236.16,74.16 240.48,85.68 231.84,85.68" style="fill:rgb(0,0,0)"/>
+<path d="M236.16,146.16L236.16,79.92"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="236.16" cy="38.16" r="36"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="236.16" y="38.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Circle</text>
+<polygon points="290.16,182.16 301.68,177.84 301.68,186.48" style="fill:rgb(0,0,0)"/>
+<path d="M295.92,182.16L362.16,182.16"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="380.16" cy="182.16" r="18"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="380.16" y="182.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">E</text>
+<circle cx="341.072" cy="106.048" r="18"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="341.072" y="106.048" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">NE</text>
+<polygon points="290.16,156.96 295.251,145.759 301.361,151.869" style="fill:rgb(0,0,0)"/>
+<path d="M328.344,118.776L294.233,152.887"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="341.072" cy="258.272" r="18"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="341.072" y="258.272" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">SE</text>
+<polygon points="290.16,207.36 301.361,212.451 295.251,218.561" style="fill:rgb(0,0,0)"/>
+<path d="M328.344,245.544L294.233,211.433"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<polygon points="110.16,218.16 122.455,218.603 119.132,226.578" style="fill:rgb(0,0,0)"/>
+<path d="M182.16,207.36 L 167.76,221.76 Q 153.36,236.16 134.418,228.268 L 115.477,220.375"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<polygon points="182.16,156.96 172.529,149.304 179.937,144.859" style="fill:rgb(0,0,0)"/>
+<path d="M200.16,38.16 L 178.56,38.16 Q 156.96,38.16 142.56,52.56 Q 128.16,66.96 153.678,109.49 L 179.197,152.021"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+</svg>

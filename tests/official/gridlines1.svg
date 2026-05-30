@@ -1,0 +1,16 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 419.731 429.12">
+<path d="M19.44,85.68L379.44,85.68"  style="fill:none;stroke-width:1.08;stroke:rgb(128,128,128);" />
+<path d="M19.44,157.68L379.44,157.68"  style="fill:none;stroke-width:1.08;stroke:rgb(128,128,128);" />
+<path d="M19.44,301.68L379.44,301.68"  style="fill:none;stroke-width:1.08;stroke:rgb(128,128,128);" />
+<path d="M19.44,373.68L379.44,373.68"  style="fill:none;stroke-width:1.08;stroke:rgb(128,128,128);" />
+<path d="M55.44,409.68L55.44,49.68"  style="fill:none;stroke-width:1.08;stroke:rgb(128,128,128);" />
+<path d="M127.44,409.68L127.44,49.68"  style="fill:none;stroke-width:1.08;stroke:rgb(128,128,128);" />
+<path d="M271.44,409.68L271.44,49.68"  style="fill:none;stroke-width:1.08;stroke:rgb(128,128,128);" />
+<path d="M343.44,409.68L343.44,49.68"  style="fill:none;stroke-width:1.08;stroke:rgb(128,128,128);" />
+<polygon points="397.44,229.68 384.48,234.54 384.48,224.82" style="fill:rgb(0,0,0)"/>
+<path d="M1.44,229.68L390.96,229.68"  style="fill:none;stroke-width:1.62;stroke:rgb(0,0,0);" />
+<text x="407.866" y="229.68" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">x</text>
+<polygon points="199.44,31.68 204.3,44.64 194.58,44.64" style="fill:rgb(0,0,0)"/>
+<path d="M199.44,427.68L199.44,38.16"  style="fill:none;stroke-width:1.62;stroke:rgb(0,0,0);" />
+<text x="199.44" y="16.56" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">y</text>
+</svg>

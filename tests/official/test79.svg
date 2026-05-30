@@ -1,0 +1,14 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 536.371 74.88">
+<path d="M2.16,72.72L97.8912,72.72L97.8912,2.16L2.16,2.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="50.0256" y="17.28" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Negative</text>
+<text x="50.0256" y="37.44" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Thickness</text>
+<text x="50.0256" y="57.6" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Lines</text>
+<polygon points="241.891,37.44 230.371,41.76 230.371,33.12" style="fill:rgb(0,0,0)"/>
+<path d="M169.891,37.44L236.131,37.44"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="205.891" y="25.74" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">above</text>
+<text x="205.891" y="49.14" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">below</text>
+<text x="349.891" y="27.36" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">above</text>
+<text x="349.891" y="47.52" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">below</text>
+<text x="493.891" y="27.36" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">above</text>
+<text x="493.891" y="47.52" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">below</text>
+</svg>

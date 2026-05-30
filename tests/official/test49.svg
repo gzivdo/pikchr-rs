@@ -1,0 +1,10 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 376.954 304.324">
+<circle cx="23.0112" cy="22.32" r="2.16" style="fill:rgb(0,0,0);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="23.0112" y="12.24" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">A</text>
+<circle cx="353.942" cy="300.004" r="2.16" style="fill:rgb(0,0,0);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="353.942" y="289.924" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">B</text>
+<circle cx="23.0112" cy="300.004" r="2.16" style="fill:rgb(0,0,0);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="23.0112" y="289.924" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">(A,B)</text>
+<circle cx="353.942" cy="22.32" r="2.16" style="fill:rgb(0,0,0);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="353.942" y="12.24" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">(B,A)</text>
+</svg>

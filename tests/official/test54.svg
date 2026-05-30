@@ -1,0 +1,20 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 634.238 336.782">
+<path d="M24.8372,285.031L108.357,285.031L108.357,152.551L86.7572,130.951L24.8372,130.951Z"  style="fill:rgb(211,211,211);stroke-width:4.86;stroke:rgb(0,0,0);" />
+<path d="M86.7572,130.951L86.7572,152.551L108.357,152.551"  style="fill:none;stroke-width:4.86;stroke:rgb(0,0,0);" />
+<text x="66.5972" y="167.671" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">wide-file</text>
+<text x="66.5972" y="187.831" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">test 1</text>
+<text x="66.5972" y="207.991" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">abcde</text>
+<text x="66.5972" y="228.151" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">uvwxyz</text>
+<text x="66.5972" y="248.311" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">bottom</text>
+<path d="M180.357,181.711L180.357,234.271A39.9168 10.8 0 0 0 260.191 234.271L260.191,181.711A39.9168 10.8 0 0 0 180.357 181.711A39.9168 10.8 0 0 0 260.191 181.711"  style="fill:rgb(211,211,211);stroke-width:4.86;stroke:rgb(0,0,0);" />
+<text x="220.274" y="206.011" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">cylinder</text>
+<text x="220.274" y="226.171" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">test 1</text>
+<path d="M332.191,207.991L470.796,311.944L609.4,207.991L470.796,104.037Z"  style="fill:rgb(211,211,211);stroke-width:4.86;stroke:rgb(0,0,0);" />
+<text x="470.796" y="167.671" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">wide-diamond</text>
+<text x="470.796" y="187.831" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">test 1</text>
+<text x="470.796" y="207.991" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">abcde</text>
+<text x="470.796" y="228.151" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">uvwxyz</text>
+<text x="470.796" y="248.311" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">bottom</text>
+<text x="317.119" y="39.9572" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Fit &amp; Background for</text>
+<text x="317.119" y="60.1172" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">File, Cylinder, and Diamond</text>
+</svg>

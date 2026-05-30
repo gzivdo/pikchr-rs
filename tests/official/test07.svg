@@ -1,0 +1,16 @@
+this is a test:  139<br>
+Colors: 16753920 0 16777215 16711680 32768 255<br>
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 206.208 126.72">
+<path d="M51.1776,99.36L159.178,99.36L159.178,27.36L51.1776,27.36Z"  style="fill:none;stroke-width:2.16;stroke:rgb(139,0,0);" />
+<text x="105.178" y="43.2" text-anchor="middle" fill="rgb(139,0,0)" dominant-baseline="central">This is</text>
+<text x="105.178" y="63.36" text-anchor="middle" fill="rgb(139,0,0)" dominant-baseline="central">&lt;b&gt;</text>
+<text x="105.178" y="83.52" text-anchor="middle" fill="rgb(139,0,0)" dominant-baseline="central">box "B"</text>
+<text x="43.9776" y="17.28" text-anchor="end" fill="rgb(0,0,0)" dominant-baseline="central">B.nw</text>
+<text x="43.9776" y="63.36" text-anchor="end" fill="rgb(0,0,0)" dominant-baseline="central">B.w</text>
+<text x="43.9776" y="109.44" text-anchor="end" fill="rgb(0,0,0)" dominant-baseline="central">B.sw</text>
+<text x="105.178" y="109.44" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">B.s</text>
+<text x="166.378" y="109.44" text-anchor="start" fill="rgb(0,0,139)" dominant-baseline="central">B.se</text>
+<text x="166.378" y="63.36" text-anchor="start" fill="rgb(0,0,0)" dominant-baseline="central">B.e</text>
+<text x="166.378" y="17.28" text-anchor="start" fill="rgb(0,0,0)" dominant-baseline="central">B.ne</text>
+<text x="105.178" y="17.28" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">B.n</text>
+</svg>

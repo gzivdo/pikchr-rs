@@ -1,0 +1,21 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 832.32 76.32">
+<ellipse cx="56.16" cy="38.16" rx="54" ry="36"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="56.16" y="38.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">document</text>
+<polygon points="182.16,38.16 170.64,42.48 170.64,33.84" style="fill:rgb(0,0,0)"/>
+<path d="M110.16,38.16L176.4,38.16"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M182.16,74.16L290.16,74.16L290.16,2.16L182.16,2.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="236.16" y="38.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">PIC</text>
+<polygon points="362.16,38.16 350.64,42.48 350.64,33.84" style="fill:rgb(0,0,0)"/>
+<path d="M290.16,38.16L356.4,38.16"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M362.16,74.16L470.16,74.16L470.16,2.16L362.16,2.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);stroke-dasharray:7.2,7.2;" />
+<text x="416.16" y="28.08" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">TBL/EQN</text>
+<text x="416.16" y="48.24" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">(optional)</text>
+<polygon points="542.16,38.16 530.64,42.48 530.64,33.84" style="fill:rgb(0,0,0)"/>
+<path d="M470.16,38.16L536.4,38.16"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M542.16,74.16L650.16,74.16L650.16,2.16L542.16,2.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="596.16" y="38.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">TROFF</text>
+<polygon points="722.16,38.16 710.64,42.48 710.64,33.84" style="fill:rgb(0,0,0)"/>
+<path d="M650.16,38.16L716.4,38.16"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<ellipse cx="776.16" cy="38.16" rx="54" ry="36"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="776.16" y="38.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">typesetter</text>
+</svg>

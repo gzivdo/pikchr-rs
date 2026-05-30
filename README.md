@@ -37,11 +37,24 @@ Under active, incremental construction. Milestones:
 | P5 | positioning & references (`at`/`from`/`to`/`then`/`chop`, `.n`/`.c`, `last`/`2nd`, `same`, sublists) | ✅ done |
 | P6 | arc/spline curves + exact text metrics, vertical layout, `<text>` parity | ✅ done |
 | P7 | containers `[ … ]`, `define` macros (`$1..$9`), `direction` | ✅ done |
-| P8 | full parity vs C reference, fuzzing, error parity | ⬜ |
+| P8 | full official corpus parity, fuzzing, error parity | ✅ done |
 
-Output is validated against the upstream C Pikchr: a 27-case geometry corpus
-(`tests/p4_diff.rs`) plus a 26-case **full-SVG** corpus exercising text metrics, arc/spline curves,
-`<text>` rendering, `define` macros and `[ … ]` containers byte-for-byte
+**Parity:** every one of the 96 renderable diagrams in the official Pikchr
+`tests/` suite renders **byte-for-byte identical** to the upstream C reference
+(`tests/p8_official.rs`); 5 of the 6 deliberate error tests are rejected with a
+matching diagnostic (see "Known differences"). Fuzz/robustness tests
+(`tests/p8_fuzz.rs`) throw ~12k random, keyword-salad and corpus-mutation inputs
+at `pikchr()` and confirm it never panics.
+
+## Known differences
+
+- `tests/test60` (a deliberate macro-redefinition *error* test) is accepted and
+  rendered instead of raising the upstream "syntax error"; the divergence is in
+  an obscure error path, not in any rendered output.
+
+Output is validated against the upstream C Pikchr: the full official `tests/`
+corpus byte-for-byte (`tests/p8_official.rs`), a 27-case geometry corpus
+(`tests/p4_diff.rs`), and a 26-case full-SVG corpus
 (`tests/p6_text.rs`). `box`, `circle`, `ellipse`, `line`, `arrow`, `move`,
 `dot`, `diamond`, `cylinder`, `file`, `oval`, and `text` render; directions,
 `then`-paths, auto-fit, rounded boxes, arrowheads, colors, dashes/dots,

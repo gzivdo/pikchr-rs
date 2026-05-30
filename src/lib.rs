@@ -60,7 +60,14 @@ pub fn pikchr(input: &str, flags: PikchrFlags) -> Result<String, PikchrError> {
         return Err(e);
     }
     match parse {
-        Ok(()) => Ok(ctx.finish()),
+        Ok(()) => {
+            let out = ctx.finish();
+            if out.is_empty() {
+                Ok("<!-- empty pikchr diagram -->\n".to_string())
+            } else {
+                Ok(out)
+            }
+        }
         Err(ParseError::User { error }) => {
             let (line, col) = line_col(input, error.at);
             Err(PikchrError::new(error.message, line, col))

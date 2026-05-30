@@ -1,0 +1,35 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 479.75 302.22">
+<path d="M2.16,169.2L74.16,169.2L74.16,70.2L65.16,61.2L2.16,61.2Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M65.16,61.2L65.16,70.2L74.16,70.2"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="38.16" y="84.96" text-anchor="middle" font-style="italic" fill="rgb(0,0,0)" dominant-baseline="central">ljust</text>
+<text x="5.58" y="105.12" text-anchor="start" fill="rgb(0,0,0)" dominant-baseline="central">*.md</text>
+<text x="5.58" y="125.28" text-anchor="start" fill="rgb(0,0,0)" dominant-baseline="central">*.txt</text>
+<text x="5.58" y="145.44" text-anchor="start" fill="rgb(0,0,0)" dominant-baseline="central">*.wiki</text>
+<polygon points="146.16,115.2 134.64,119.52 134.64,110.88" style="fill:rgb(0,0,0)"/>
+<path d="M74.16,115.2L140.4,115.2"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M161.16,150.48L246.59,150.48A15 15 0 0 0 261.59 135.48L261.59,94.92A15 15 0 0 0 246.59 79.92L161.16,79.92A15 15 0 0 0 146.16 94.92L146.16,135.48A15 15 0 0 0 161.16 150.48Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="149.58" y="95.04" text-anchor="start" font-family="monospace" fill="rgb(0,0,0)" dominant-baseline="central">Markdown</text>
+<text x="149.58" y="115.2" text-anchor="start" font-family="monospace" fill="rgb(0,0,0)" dominant-baseline="central">Interpreter</text>
+<text x="149.58" y="135.36" text-anchor="start" font-style="italic" font-family="monospace" fill="rgb(0,0,0)" dominant-baseline="central">(monospace)</text>
+<polygon points="405.59,115.2 394.07,119.52 394.07,110.88" style="fill:rgb(0,0,0)"/>
+<path d="M261.59,115.2L399.83,115.2"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="333.59" y="103.5" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">above</text>
+<text x="333.59" y="126.9" text-anchor="end" fill="rgb(0,0,0)" dominant-baseline="central">rjust </text>
+<text x="333.59" y="126.9" text-anchor="start" fill="rgb(0,0,0)" dominant-baseline="central"> ljust</text>
+<path d="M405.59,169.2L477.59,169.2L477.59,82.8L455.99,61.2L405.59,61.2Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M455.99,61.2L455.99,82.8L477.59,82.8"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="441.59" y="95.04" text-anchor="middle" font-style="italic" fill="rgb(0,0,0)" dominant-baseline="central">rjust</text>
+<text x="474.17" y="115.2" text-anchor="end" fill="rgb(0,0,0)" dominant-baseline="central">*.htm</text>
+<text x="474.17" y="135.36" text-anchor="end" fill="rgb(0,0,0)" dominant-baseline="central">*.js</text>
+<polygon points="203.875,222.48 199.555,210.96 208.195,210.96" style="fill:rgb(0,0,0)"/>
+<path d="M203.875,150.48L203.875,216.72"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="203.875" y="186.48" text-anchor="end" fill="rgb(0,0,0)" dominant-baseline="central">rjust </text>
+<text x="203.875" y="186.48" text-anchor="start" fill="rgb(0,0,0)" dominant-baseline="central"> ljust</text>
+<path d="M149.875,294.48L257.875,294.48L257.875,222.48L149.875,222.48Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="254.455" y="238.32" text-anchor="end" fill="rgb(0,0,0)" dominant-baseline="central">rjust</text>
+<text x="203.875" y="258.48" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">center</text>
+<text x="153.295" y="238.32" text-anchor="start" fill="rgb(0,0,0)" dominant-baseline="central">ljust</text>
+<text x="254.455" y="284.31" text-anchor="end" fill="rgb(0,0,0)" dominant-baseline="central">rjust</text>
+<text x="153.295" y="284.31" text-anchor="start" fill="rgb(0,0,0)" font-size="156.25%" dominant-baseline="central">ljust</text>
+<text x="239.875" y="14.76" text-anchor="middle" font-weight="bold" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">Text Justification Rules</text>
+</svg>

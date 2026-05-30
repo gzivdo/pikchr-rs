@@ -1,0 +1,22 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 436.32 403.2">
+<polygon points="74.16,38.16 62.64,42.48 62.64,33.84" style="fill:rgb(0,0,0)"/>
+<path d="M2.16,38.16L68.4,38.16"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M74.16,74.16L218.16,74.16L218.16,2.16L74.16,2.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="146.16" y="38.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Start</text>
+<polygon points="290.16,38.16 278.64,42.48 278.64,33.84" style="fill:rgb(0,0,0)"/>
+<path d="M218.16,38.16L284.4,38.16"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M290.16,74.16L434.16,74.16L434.16,2.16L290.16,2.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="362.16" y="38.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Right</text>
+<polygon points="146.16,146.16 141.84,134.64 150.48,134.64" style="fill:rgb(0,0,0)"/>
+<path d="M146.16,74.16L146.16,140.4"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M74.16,218.16L218.16,218.16L218.16,146.16L74.16,146.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="146.16" y="182.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Down</text>
+<polygon points="146.16,290.16 141.84,278.64 150.48,278.64" style="fill:rgb(0,0,0)"/>
+<path d="M146.16,218.16L146.16,284.4"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M22.9536,401.04L269.366,401.04L269.366,290.16L22.9536,290.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="146.16" y="305.28" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Should continue down</text>
+<text x="146.16" y="325.44" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">from "Down"</text>
+<text x="146.16" y="345.6" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">not to the right!</text>
+<text x="146.16" y="365.76" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">See forum post 75a2220c44</text>
+<text x="146.16" y="385.92" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">on 2023-08-12</text>
+</svg>

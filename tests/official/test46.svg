@@ -1,0 +1,92 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 506.914 606.239">
+<path d="M193.426,343.058L301.426,343.058L301.426,271.058L193.426,271.058Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);stroke-dasharray:7.2,7.2;" />
+<circle cx="247.426" cy="186.018" r="20.3708"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="247.426" y="186.018" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">.n</text>
+<polygon points="247.426,271.058 244.532,263.339 250.321,263.339" style="fill:rgb(0,0,0)"/>
+<path d="M247.426,206.389L247.426,267.199"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<circle cx="291.446" cy="106.774" r="34.6879"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="291.446" y="106.774" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">.north</text>
+<polygon points="247.426,271.058 246.628,262.853 252.22,264.352" style="fill:rgb(0,0,0)"/>
+<path d="M282.468,140.28L248.425,267.33"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<circle cx="289.946" cy="197.412" r="19.1138"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="289.946" y="197.412" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">.t</text>
+<polygon points="247.426,271.058 248.779,262.926 253.792,265.821" style="fill:rgb(0,0,0)"/>
+<path d="M280.389,213.965L249.356,267.716"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<circle cx="203.407" cy="106.774" r="26.65"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="203.407" y="106.774" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">.top</text>
+<polygon points="247.426,271.058 242.633,264.352 248.225,262.853" style="fill:rgb(0,0,0)"/>
+<path d="M210.304,132.516L246.428,267.33"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<circle cx="341.514" cy="230.97" r="23.9293"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="341.514" y="230.97" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">.ne</text>
+<polygon points="301.426,271.058 304.838,263.553 308.931,267.647" style="fill:rgb(0,0,0)"/>
+<path d="M324.594,247.89L304.155,268.329"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<circle cx="388.285" cy="234.175" r="20.1028"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="388.285" y="234.175" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">.e</text>
+<polygon points="301.426,307.058 305.479,299.879 309.2,304.314" style="fill:rgb(0,0,0)"/>
+<path d="M372.885,247.097L304.383,304.577"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<circle cx="465.71" cy="263.038" r="32.6808"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="465.71" y="263.038" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">.right</text>
+<polygon points="301.426,307.058 308.133,302.264 309.631,307.856" style="fill:rgb(0,0,0)"/>
+<path d="M434.143,271.497L305.154,306.059"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<circle cx="468.921" cy="336.592" r="35.8327"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="468.921" y="336.592" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">.end&sup1;</text>
+<polygon points="301.426,307.058 309.53,305.548 308.525,311.249" style="fill:rgb(0,0,0)"/>
+<path d="M433.633,330.369L305.227,307.728"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<circle cx="354.7" cy="362.448" r="23.1786"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="354.7" y="362.448" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">.se</text>
+<polygon points="301.426,343.058 309.669,342.978 307.689,348.418" style="fill:rgb(0,0,0)"/>
+<path d="M332.92,354.52L305.053,344.378"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<circle cx="247.426" cy="428.097" r="19.728"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="247.426" y="428.097" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">.s</text>
+<polygon points="247.426,343.058 250.321,350.776 244.532,350.776" style="fill:rgb(0,0,0)"/>
+<path d="M247.426,408.369L247.426,346.917"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<circle cx="203.407" cy="507.341" r="34.9993"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="203.407" y="507.341" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">.south</text>
+<polygon points="247.426,343.058 248.225,351.262 242.633,349.764" style="fill:rgb(0,0,0)"/>
+<path d="M212.465,473.535L246.428,346.786"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<circle cx="188.895" cy="426.65" r="26.65"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="188.895" y="426.65" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">.bot</text>
+<polygon points="247.426,343.058 245.37,351.041 240.628,347.72" style="fill:rgb(0,0,0)"/>
+<path d="M204.18,404.82L245.213,346.219"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<circle cx="299.78" cy="486.897" r="40.9125"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="299.78" y="486.897" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">.bottom</text>
+<polygon points="247.426,343.058 252.786,349.321 247.346,351.301" style="fill:rgb(0,0,0)"/>
+<path d="M285.787,448.452L248.746,346.684"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<circle cx="153.339" cy="383.146" r="24.7872"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="153.339" y="383.146" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">.sw</text>
+<polygon points="193.426,343.058 190.015,350.562 185.922,346.469" style="fill:rgb(0,0,0)"/>
+<path d="M170.866,365.619L190.698,345.787"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<circle cx="80.0406" cy="307.058" r="21.5259"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="80.0406" y="307.058" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">.w</text>
+<polygon points="193.426,307.058 185.708,309.952 185.708,304.163" style="fill:rgb(0,0,0)"/>
+<path d="M101.567,307.058L189.567,307.058"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<circle cx="29.143" cy="351.077" r="26.983"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="29.143" y="351.077" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">.left</text>
+<polygon points="193.426,307.058 186.72,311.851 185.222,306.26" style="fill:rgb(0,0,0)"/>
+<path d="M55.2066,344.094L189.699,308.057"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<circle cx="64.9734" cy="247.159" r="39.8976"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="64.9734" y="247.159" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">.start&sup1;</text>
+<polygon points="193.426,307.058 185.208,306.419 187.654,301.173" style="fill:rgb(0,0,0)"/>
+<path d="M101.133,264.021L189.929,305.427"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<circle cx="153.339" cy="230.97" r="25.5701"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="153.339" y="230.97" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">.nw</text>
+<polygon points="193.426,271.058 185.922,267.647 190.015,263.553" style="fill:rgb(0,0,0)"/>
+<path d="M171.419,249.051L190.698,268.329"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<circle cx="187.528" cy="178.605" r="19.9142"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="187.528" y="178.605" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">.c</text>
+<path d="M195.944,196.653L217.477,242.831"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<polygon points="247.426,307.058 241.541,301.286 246.788,298.839" style="fill:rgb(0,0,0)"/>
+<path d="M217.477,242.831L245.795,303.56"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<circle cx="389.202" cy="453.871" r="38.4629"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="389.202" y="453.871" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">.center</text>
+<path d="M362.484,426.203L318.314,380.464"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<polygon points="247.426,307.058 254.87,310.599 250.706,314.621" style="fill:rgb(0,0,0)"/>
+<path d="M318.314,380.464L250.107,309.834"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<circle cx="114.242" cy="355.533" r="20.88"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="114.242" y="355.533" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">&lambda;</text>
+<path d="M133.862,348.392L180.834,331.295"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<polygon points="247.426,307.058 241.163,312.418 239.184,306.978" style="fill:rgb(0,0,0)"/>
+<path d="M180.834,331.295L243.8,308.378"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<text x="253.457" y="22.95" text-anchor="middle" fill="rgb(0,0,0)" font-size="156.25%" dominant-baseline="central">21 Names For 9 Boundary Points</text>
+<text x="253.457" y="588.959" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">&sup1; "start" and "end" assume a "right" layout direction</text>
+</svg>

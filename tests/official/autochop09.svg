@@ -1,0 +1,26 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 323.564 277.657">
+<circle cx="117.59" cy="116.752" r="23.0045"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,255);" />
+<text x="117.59" y="116.752" text-anchor="middle" fill="rgb(0,0,255)" dominant-baseline="central">C0</text>
+<circle cx="117.59" cy="116.752" r="57.5112"  style="fill:none;stroke-width:2.16;stroke:rgb(255,0,0);" />
+<text x="117.59" y="74.3603" text-anchor="middle" fill="rgb(255,0,0)" dominant-baseline="central">C1</text>
+<circle cx="276.97" cy="24.7336" r="22.5736"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,255);" />
+<text x="276.97" y="24.7336" text-anchor="middle" fill="rgb(0,0,255)" dominant-baseline="central">X1</text>
+<circle cx="298.83" cy="84.794" r="22.5736"  style="fill:none;stroke-width:2.16;stroke:rgb(255,0,0);" />
+<text x="298.83" y="84.794" text-anchor="middle" fill="rgb(255,0,0)" dominant-baseline="central">X2</text>
+<circle cx="298.83" cy="148.709" r="22.5736"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,255);" />
+<text x="298.83" y="148.709" text-anchor="middle" fill="rgb(0,0,255)" dominant-baseline="central">X3</text>
+<circle cx="276.97" cy="208.77" r="22.5736"  style="fill:none;stroke-width:2.16;stroke:rgb(255,0,0);" />
+<text x="276.97" y="208.77" text-anchor="middle" fill="rgb(255,0,0)" dominant-baseline="central">X4</text>
+<polygon points="257.421,36.0203 249.604,45.5216 245.284,38.0391" style="fill:rgb(0,0,255)"/>
+<path d="M137.513,105.249L252.433,38.9003"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,255);" />
+<polygon points="276.6,88.7139 266.005,94.9687 264.505,86.4599" style="fill:rgb(255,0,0)"/>
+<path d="M174.228,106.765L270.927,89.7141"  style="fill:none;stroke-width:2.16;stroke:rgb(255,0,0);" />
+<polygon points="140.245,120.746 152.341,118.492 150.84,127.001" style="fill:rgb(0,0,255)"/>
+<path d="M276.6,144.789L145.918,121.746"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,255);" />
+<polygon points="167.397,145.507 179.533,147.526 175.213,155.008" style="fill:rgb(255,0,0)"/>
+<path d="M257.421,197.483L172.385,148.387"  style="fill:none;stroke-width:2.16;stroke:rgb(255,0,0);" />
+<text x="117.59" y="199.897" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">chop bug 2021-07-17</text>
+<text x="117.59" y="220.057" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">forum 1d46e3a0bc5c5631</text>
+<text x="117.59" y="240.217" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">red lines to red circles</text>
+<text x="117.59" y="260.377" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">blue lines to blue circle</text>
+</svg>

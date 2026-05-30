@@ -1,0 +1,14 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 326.521 334.396">
+<path d="M2.16,187.648L74.16,187.648L74.16,101.248L52.56,79.6479L2.16,79.6479Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M52.56,79.6479L52.56,101.248L74.16,101.248"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="38.16" y="133.648" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">A</text>
+<path d="M216.361,271.036L216.361,321.436A54 10.8 0 0 0 324.361 321.436L324.361,271.036A54 10.8 0 0 0 216.361 271.036A54 10.8 0 0 0 324.361 271.036"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="270.361" y="304.336" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">B</text>
+<path d="M74.16,187.648L216.361,271.036"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="145.26" y="217.642" text-anchor="middle" fill="rgb(0,0,0)" transform="rotate(30.38801219 145.26,229.342)" dominant-baseline="central">from A to B</text>
+<circle cx="145.26" cy="229.342" r="2.16" style="fill:rgb(255,0,0);stroke-width:2.16;stroke:rgb(255,0,0);" />
+<circle cx="74.16" cy="187.648" r="2.16" style="fill:rgb(255,0,0);stroke-width:2.16;stroke:rgb(255,0,0);" />
+<circle cx="216.361" cy="271.036" r="2.16" style="fill:rgb(255,0,0);stroke-width:2.16;stroke:rgb(255,0,0);" />
+<text x="163.26" y="19.8" text-anchor="middle" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">Text Alignment</text>
+<text x="163.26" y="45" text-anchor="middle" fill="rgb(0,0,0)" font-size="125%" dominant-baseline="central">On A Chopped Line</text>
+</svg>

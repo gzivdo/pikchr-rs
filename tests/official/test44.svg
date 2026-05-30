@@ -1,0 +1,21 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 414.72 112.32">
+<!-- file "*.md" w=0.5 h=0.75 center=0,0 enter=-0.25,0 exit=0.25,0 right -->
+<path d="M2.16,110.16L74.16,110.16L74.16,11.16L65.16,2.16L2.16,2.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M65.16,2.16L65.16,11.16L74.16,11.16"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="38.16" y="56.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">*.md</text>
+<!-- arrow w=0.5 h=0 center=0.5,0 enter=0.25,0 exit=0.75,0 right -->
+<polygon points="146.16,56.16 134.64,60.48 134.64,51.84" style="fill:rgb(0,0,0)"/>
+<path d="M74.16,56.16L140.4,56.16"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<!-- box "Markdown" w=0.75 h=0.5 center=1.125,0 enter=0.75,0 exit=1.5,0 right -->
+<path d="M161.16,92.16L239.16,92.16A15 15 0 0 0 254.16 77.16L254.16,35.16A15 15 0 0 0 239.16 20.16L161.16,20.16A15 15 0 0 0 146.16 35.16L146.16,77.16A15 15 0 0 0 161.16 92.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="200.16" y="46.08" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Markdown</text>
+<text x="200.16" y="66.24" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Interpreter</text>
+<!-- arrow "HTML" w=0.6 h=0 center=1.8,0 enter=1.5,0 exit=2.1,0 right -->
+<polygon points="340.56,56.16 329.04,60.48 329.04,51.84" style="fill:rgb(0,0,0)"/>
+<path d="M254.16,56.16L334.8,56.16"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="297.36" y="44.46" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">HTML</text>
+<!-- file " HTML " w=0.5 h=0.75 center=2.35,0 enter=2.1,0 exit=2.6,0 right -->
+<path d="M340.56,110.16L412.56,110.16L412.56,23.76L390.96,2.16L340.56,2.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M390.96,2.16L390.96,23.76L412.56,23.76"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="376.56" y="56.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central"> HTML </text>
+</svg>

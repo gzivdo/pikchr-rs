@@ -1,0 +1,18 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 213.178 497.53">
+<text x="106.589" y="17.28" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Zero Thickness Objects</text>
+<path d="M85.1616,62.64L128.016,62.64L128.016,32.4L85.1616,32.4Z"  style="fill:rgb(173,216,230);stroke-width:0;stroke:rgb(0,0,0);" />
+<text x="106.589" y="47.52" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Box</text>
+<circle cx="106.589" cy="97.1725" r="34.5325"  style="fill:rgb(255,255,0);stroke-width:0;stroke:rgb(0,0,0);" />
+<text x="106.589" y="97.1725" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Circle</text>
+<path d="M84.816,205.145L128.362,205.145L128.362,153.305L106.762,131.705L84.816,131.705Z"  style="fill:rgb(144,238,144);stroke-width:0;stroke:rgb(0,0,0);" />
+<path d="M106.762,131.705L106.762,153.305L128.362,153.305"  style="fill:none;stroke-width:0;stroke:rgb(0,0,0);" />
+<text x="106.589" y="168.425" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">File</text>
+<path d="M89.1648,235.385L124.013,235.385A15.12 15.12 0 0 0 139.133 220.265A15.12 15.12 0 0 0 124.013 205.145L89.1648,205.145A15.12 15.12 0 0 0 74.0448 220.265A15.12 15.12 0 0 0 89.1648 235.385Z"  style="fill:rgb(255,192,203);stroke-width:0;stroke:rgb(0,0,0);" />
+<text x="106.589" y="220.265" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Oval 1</text>
+<path d="M106.589,348.771A31.1811 31.1811 0 0 0 137.77 317.59L137.77,266.566A31.1811 31.1811 0 0 0 106.589 235.385A31.1811 31.1811 0 0 0 75.4077 266.566L75.4077,317.59A31.1811 31.1811 0 0 0 106.589 348.771Z"  style="fill:rgb(211,211,211);stroke-width:0;stroke:rgb(0,0,0);" />
+<text x="106.589" y="292.078" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Oval 2</text>
+<path d="M64.944,359.571L64.944,389.271A41.6448 10.8 0 0 0 148.234 389.271L148.234,359.571A41.6448 10.8 0 0 0 64.944 359.571A41.6448 10.8 0 0 0 148.234 359.571"  style="fill:rgb(255,165,0);stroke-width:0;stroke:rgb(0,0,0);" />
+<text x="106.589" y="382.521" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Cylinder</text>
+<path d="M43.056,447.72L106.589,495.37L170.122,447.72L106.589,400.071Z"  style="fill:rgb(173,216,230);stroke-width:0;stroke:rgb(0,0,0);" />
+<text x="106.589" y="447.72" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Diamond</text>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 627.942 146.052">
+<circle cx="313.971" cy="73.0261" r="36"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="313.971" y="73.0261" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">C0</text>
+<circle cx="457.971" cy="73.0261" r="36"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="457.971" y="73.0261" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">C1</text>
+<path d="M2.16,143.892L625.782,143.892L625.782,2.16L2.16,2.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<polygon points="421.971,73.0261 410.451,77.3461 410.451,68.7061" style="fill:rgb(255,0,0)"/>
+<path d="M349.971,73.0261L416.211,73.0261"  style="fill:none;stroke-width:2.16;stroke:rgb(255,0,0);" />
+<text x="140.066" y="42.7861" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">bug report 2021-07-17</text>
+<text x="140.066" y="62.9461" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">forum 73eea815afda0715</text>
+<text x="140.066" y="83.1061" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">arrow C0 to C1 chopped</text>
+<text x="140.066" y="103.266" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">C0 and box have same center</text>
+</svg>

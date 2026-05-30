@@ -10,6 +10,7 @@ fn renders_a_box() {
 
 #[test]
 fn empty_input_is_ok() {
-    let svg = pikchr_rs::pikchr("", Default::default()).expect("empty should render");
-    assert!(svg.contains("<svg"));
+    // An empty diagram yields the upstream "empty diagram" comment, not an SVG.
+    let out = pikchr_rs::pikchr("", Default::default()).expect("empty should render");
+    assert_eq!(out, "<!-- empty pikchr diagram -->\n");
 }

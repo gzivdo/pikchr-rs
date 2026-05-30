@@ -1,0 +1,7 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 370.195 141.84">
+<text x="185.098" y="17.28" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">Box B should full sized - not fit-to-text.</text>
+<text x="185.098" y="37.44" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">See forum post f9f5d90f33 on 2025-03-03.</text>
+<text x="185.098" y="67.68" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">A</text>
+<path d="M196.733,139.68L304.733,139.68L304.733,67.68L196.733,67.68Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="250.733" y="103.68" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">B</text>
+</svg>

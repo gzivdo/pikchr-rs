@@ -1,0 +1,7 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 512.454 265.119">
+<path d="M228.932,149.573L340.215,149.573L340.215,58.8529L228.932,58.8529Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="284.573" y="73.9729" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">1cm top</text>
+<text x="284.573" y="94.1329" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">2cm bottom</text>
+<text x="284.573" y="114.293" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">3cm right</text>
+<text x="284.573" y="134.453" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">4cm left</text>
+</svg>

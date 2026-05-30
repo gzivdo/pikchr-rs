@@ -1,0 +1,77 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' width="432" height="322" viewBox="0 0 540.933 403.377">
+<path d="M2.16,202.792L538.773,202.792L538.773,131.77L2.16,131.77Z"  style="fill:rgb(198,226,255);stroke-width:2.16;stroke:rgb(170,197,223);" />
+<path d="M184.178,131.77L538.773,131.77L538.773,60.7479L184.178,60.7479Z"  style="fill:rgb(154,204,252);stroke-width:2.16;stroke:rgb(170,197,223);" />
+<path d="M2.16,401.217L457.749,401.217L457.749,330.195L2.16,330.195Z"  style="fill:rgb(198,226,255);stroke-width:2.16;stroke:rgb(170,197,223);" />
+<path d="M184.178,330.195L457.749,330.195L457.749,259.173L184.178,259.173Z"  style="fill:rgb(154,204,252);stroke-width:2.16;stroke:rgb(170,197,223);" />
+<circle cx="43.1645" cy="167.281" r="23.0045"  style="fill:rgb(255,255,255);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="43.1645" y="167.281" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">C0</text>
+<polygon points="102.169,167.281 90.649,171.601 90.649,162.961" style="fill:rgb(0,0,0)"/>
+<path d="M66.169,167.281L96.409,167.281"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="125.173" cy="167.281" r="23.0045"  style="fill:rgb(255,255,255);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="125.173" y="167.281" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">C1</text>
+<polygon points="184.178,167.281 178.418,169.441 178.418,165.121" style="fill:rgb(0,0,0)"/>
+<path d="M148.178,167.281L181.298,167.281"  style="fill:none;stroke-width:1.08;stroke:rgb(0,0,0);" />
+<circle cx="207.182" cy="167.281" r="23.0045"  style="fill:rgb(255,255,255);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="207.182" y="167.281" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">C2</text>
+<polygon points="266.187,167.281 254.667,171.601 254.667,162.961" style="fill:rgb(0,0,0)"/>
+<path d="M230.187,167.281L260.427,167.281"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="289.191" cy="167.281" r="23.0045"  style="fill:rgb(255,255,255);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="289.191" y="167.281" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">C4</text>
+<polygon points="348.196,167.281 336.676,171.601 336.676,162.961" style="fill:rgb(0,0,0)"/>
+<path d="M312.196,167.281L342.436,167.281"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="371.2" cy="167.281" r="23.0045"  style="fill:rgb(255,255,255);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="371.2" y="167.281" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">C6</text>
+<circle cx="248.187" cy="96.2588" r="23.0045"  style="fill:rgb(255,255,255);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="248.187" y="96.2588" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">C3</text>
+<polygon points="307.191,96.2588 295.671,100.579 295.671,91.9388" style="fill:rgb(0,0,0)"/>
+<path d="M271.191,96.2588L301.431,96.2588"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="330.196" cy="96.2588" r="23.0045"  style="fill:rgb(255,255,255);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="330.196" y="96.2588" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">C5</text>
+<polygon points="236.685,116.181 234.666,128.318 227.183,123.998" style="fill:rgb(0,0,0)"/>
+<path d="M218.685,147.358L233.805,121.17"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="412.205" cy="96.2588" r="23.0045"  style="fill:rgb(255,255,255);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="412.205" y="96.2588" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">C3'</text>
+<polygon points="471.209,96.2588 459.689,100.579 459.689,91.9388" style="fill:rgb(0,0,0)"/>
+<path d="M435.209,96.2588L465.449,96.2588"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="494.214" cy="96.2588" r="23.0045"  style="fill:rgb(255,255,255);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="494.214" y="96.2588" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">C5'</text>
+<polygon points="400.703,116.181 398.684,128.318 391.201,123.998" style="fill:rgb(0,0,0)"/>
+<path d="M382.703,147.358L397.823,121.17"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<polygon points="166.178,172.95 169.072,180.668 163.284,180.668" style="fill:rgb(128,128,128)"/>
+<path d="M166.178,176.809 L 166.178,197.557 Q 166.178,218.304 180.351,218.304 L 194.524,218.304"  style="fill:none;stroke-width:1.4472;stroke:rgb(128,128,128);" />
+<text x="194.524" y="218.304" text-anchor="start" fill="rgb(0,0,0)" font-size="80%" dominant-baseline="central">  0.5*(thickness)</text>
+<circle cx="194.524" cy="218.304" r="2.16" style="fill:rgb(0,0,0);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="43.1645" cy="365.706" r="23.0045"  style="fill:rgb(255,255,255);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="43.1645" y="365.706" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">C0</text>
+<polygon points="102.169,365.706 90.649,370.026 90.649,361.386" style="fill:rgb(0,0,0)"/>
+<path d="M66.169,365.706L96.409,365.706"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="125.173" cy="365.706" r="23.0045"  style="fill:rgb(255,255,255);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="125.173" y="365.706" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">C1</text>
+<polygon points="184.178,365.706 172.658,370.026 172.658,361.386" style="fill:rgb(0,0,0)"/>
+<path d="M148.178,365.706L178.418,365.706"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="207.182" cy="365.706" r="23.0045"  style="fill:rgb(255,255,255);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="207.182" y="365.706" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">C2</text>
+<polygon points="266.187,365.706 254.667,370.026 254.667,361.386" style="fill:rgb(0,0,0)"/>
+<path d="M230.187,365.706L260.427,365.706"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="289.191" cy="365.706" r="23.0045"  style="fill:rgb(255,255,255);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="289.191" y="365.706" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">C4</text>
+<polygon points="348.196,365.706 336.676,370.026 336.676,361.386" style="fill:rgb(0,0,0)"/>
+<path d="M312.196,365.706L342.436,365.706"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="371.2" cy="365.706" r="23.0045"  style="fill:rgb(255,255,255);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="371.2" y="365.706" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">C6</text>
+<circle cx="248.187" cy="294.684" r="23.0045"  style="fill:rgb(255,255,255);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="248.187" y="294.684" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">C3</text>
+<polygon points="307.191,294.684 295.671,299.004 295.671,290.364" style="fill:rgb(0,0,0)"/>
+<path d="M271.191,294.684L301.431,294.684"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="330.196" cy="294.684" r="23.0045"  style="fill:rgb(255,255,255);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="330.196" y="294.684" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">C5</text>
+<polygon points="389.2,294.684 377.68,299.004 377.68,290.364" style="fill:rgb(0,0,0)"/>
+<path d="M353.2,294.684L383.44,294.684"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<circle cx="412.205" cy="294.684" r="23.0045"  style="fill:rgb(255,255,255);stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="412.205" y="294.684" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">C7</text>
+<polygon points="236.685,314.606 234.666,326.743 227.183,322.423" style="fill:rgb(0,0,0)"/>
+<path d="M218.685,345.783L233.805,319.595"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<polygon points="400.703,314.606 398.684,326.743 391.201,322.423" style="fill:rgb(0,0,0)"/>
+<path d="M382.703,345.783L397.823,319.595"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="270.467" y="22.95" text-anchor="middle" font-weight="bold" fill="rgb(0,0,0)" font-size="156.25%" dominant-baseline="central">Rebase vs. Merge</text>
+</svg>

@@ -1,0 +1,54 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 620.64 364.32">
+<polygon points="74.16,326.16 62.64,330.48 62.64,321.84" style="fill:rgb(0,0,0)"/>
+<path d="M2.16,326.16L68.4,326.16"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="38.16" y="314.46" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">source</text>
+<text x="38.16" y="337.86" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">code</text>
+<path d="M74.16,362.16L182.16,362.16L182.16,290.16L74.16,290.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="128.16" y="316.08" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">lexical</text>
+<text x="128.16" y="336.24" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">analyzer</text>
+<polygon points="254.16,326.16 242.64,330.48 242.64,321.84" style="fill:rgb(0,0,0)"/>
+<path d="M182.16,326.16L248.4,326.16"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="218.16" y="314.46" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">tokens</text>
+<path d="M254.16,362.16L362.16,362.16L362.16,290.16L254.16,290.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="308.16" y="326.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">parser</text>
+<polygon points="434.16,326.16 422.64,330.48 422.64,321.84" style="fill:rgb(0,0,0)"/>
+<path d="M362.16,326.16L428.4,326.16"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="398.16" y="314.46" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">intermediate</text>
+<text x="398.16" y="337.86" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">code</text>
+<path d="M434.16,362.16L542.16,362.16L542.16,290.16L434.16,290.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="488.16" y="316.08" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">semantic</text>
+<text x="488.16" y="336.24" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">checker</text>
+<polygon points="614.16,326.16 602.64,330.48 602.64,321.84" style="fill:rgb(0,0,0)"/>
+<path d="M542.16,326.16L608.4,326.16"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<polygon points="128.16,290.16 123.84,278.64 132.48,278.64" style="fill:rgb(0,0,0)"/>
+<polygon points="128.16,218.16 132.48,229.68 123.84,229.68" style="fill:rgb(0,0,0)"/>
+<path d="M128.16,284.4L128.16,223.92"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M74.16,218.16L182.16,218.16L182.16,146.16L74.16,146.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="128.16" y="172.08" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">lexical</text>
+<text x="128.16" y="192.24" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">corrector</text>
+<polygon points="308.16,290.16 303.84,278.64 312.48,278.64" style="fill:rgb(0,0,0)"/>
+<polygon points="308.16,218.16 312.48,229.68 303.84,229.68" style="fill:rgb(0,0,0)"/>
+<path d="M308.16,284.4L308.16,223.92"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M254.16,218.16L362.16,218.16L362.16,146.16L254.16,146.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="308.16" y="172.08" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">syntactic</text>
+<text x="308.16" y="192.24" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">corrector</text>
+<polygon points="308.16,74.16 312.48,85.68 303.84,85.68" style="fill:rgb(0,0,0)"/>
+<path d="M308.16,146.16L308.16,79.92"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M254.16,74.16L362.16,74.16L362.16,2.16L254.16,2.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="308.16" y="18" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">diagnostic</text>
+<text x="308.16" y="38.16" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">message</text>
+<text x="308.16" y="58.32" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">printer</text>
+<polygon points="362.16,38.16 373.68,33.84 373.68,42.48" style="fill:rgb(0,0,0)"/>
+<polygon points="434.16,38.16 422.64,42.48 422.64,33.84" style="fill:rgb(0,0,0)"/>
+<path d="M367.92,38.16L428.4,38.16"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<path d="M434.16,74.16L542.16,74.16L542.16,2.16L434.16,2.16Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="488.16" y="28.08" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">symbol</text>
+<text x="488.16" y="48.24" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">table</text>
+<polygon points="254.16,74.16 249.069,85.3606 242.959,79.2512" style="fill:rgb(0,0,0)"/>
+<path d="M182.16,146.16L250.087,78.2329"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<polygon points="362.16,74.16 369.901,83.7227 361.705,86.4549" style="fill:rgb(0,0,0)"/>
+<path d="M434.16,290.16L363.981,79.6244"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<polygon points="488.16,290.16 483.84,278.64 492.48,278.64" style="fill:rgb(0,0,0)"/>
+<polygon points="488.16,74.16 492.48,85.68 483.84,85.68" style="fill:rgb(0,0,0)"/>
+<path d="M488.16,284.4L488.16,79.92"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+</svg>

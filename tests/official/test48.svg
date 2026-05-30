@@ -1,0 +1,29 @@
+<svg xmlns='http://www.w3.org/2000/svg' style='font-size:initial;' viewBox="0 0 421.459 388.328">
+<path d="M186.123,285.242L166.119,171.792L216.002,200.592L257.299,141.613L227.293,311.788L207.592,257.662"  style="fill:none;stroke-width:3.24;stroke-linejoin:round;stroke:rgb(0,0,255);" />
+<text x="211.709" y="226.701" text-anchor="middle" fill="rgb(0,0,255)" dominant-baseline="central">+</text>
+<path d="M47.0599,339.142L112.09,339.142A15.12 15.12 0 0 0 127.21 324.022A15.12 15.12 0 0 0 112.09 308.902L47.0599,308.902A15.12 15.12 0 0 0 31.9399 324.022A15.12 15.12 0 0 0 47.0599 339.142Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="79.5751" y="324.022" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">1st vertex</text>
+<polygon points="186.123,285.242 180.24,291.017 177.894,285.725" style="fill:rgb(0,0,0)"/>
+<path d="M122.782,313.331L182.595,286.807"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<path d="M17.28,186.912L88.1856,186.912A15.12 15.12 0 0 0 103.306 171.792A15.12 15.12 0 0 0 88.1856 156.672L17.28,156.672A15.12 15.12 0 0 0 2.16 171.792A15.12 15.12 0 0 0 17.28 186.912Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="52.7328" y="171.792" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">2nd vertex</text>
+<polygon points="166.119,171.792 158.4,174.687 158.4,168.898" style="fill:rgb(0,0,0)"/>
+<path d="M103.306,171.792L162.259,171.792"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<path d="M181.874,102.326L250.13,102.326A15.12 15.12 0 0 0 265.25 87.2065A15.12 15.12 0 0 0 250.13 72.0865L181.874,72.0865A15.12 15.12 0 0 0 166.754 87.2065A15.12 15.12 0 0 0 181.874 102.326Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="216.002" y="87.2065" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">3rd vertex</text>
+<polygon points="216.002,200.592 213.107,192.874 218.896,192.874" style="fill:rgb(0,0,0)"/>
+<path d="M216.002,102.326L216.002,196.733"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<path d="M337.191,156.733L404.179,156.733A15.12 15.12 0 0 0 419.299 141.613A15.12 15.12 0 0 0 404.179 126.493L337.191,126.493A15.12 15.12 0 0 0 322.071 141.613A15.12 15.12 0 0 0 337.191 156.733Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="370.685" y="141.613" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">4th vertex</text>
+<polygon points="257.299,141.613 265.018,138.719 265.018,144.508" style="fill:rgb(0,0,0)"/>
+<path d="M322.071,141.613L261.158,141.613"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<path d="M307.184,326.908L374.173,326.908A15.12 15.12 0 0 0 389.293 311.788A15.12 15.12 0 0 0 374.173 296.668L307.184,296.668A15.12 15.12 0 0 0 292.064 311.788A15.12 15.12 0 0 0 307.184 326.908Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="340.679" y="311.788" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">5th vertex</text>
+<polygon points="227.293,311.788 235.011,308.894 235.011,314.683" style="fill:rgb(0,0,0)"/>
+<path d="M292.064,311.788L231.152,311.788"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<path d="M174.098,386.168L241.087,386.168A15.12 15.12 0 0 0 256.207 371.048A15.12 15.12 0 0 0 241.087 355.928L174.098,355.928A15.12 15.12 0 0 0 158.978 371.048A15.12 15.12 0 0 0 174.098 386.168Z"  style="fill:none;stroke-width:2.16;stroke:rgb(0,0,0);" />
+<text x="207.592" y="371.048" text-anchor="middle" fill="rgb(0,0,0)" dominant-baseline="central">6th vertex</text>
+<polygon points="207.592,257.662 210.487,265.38 204.698,265.38" style="fill:rgb(0,0,0)"/>
+<path d="M207.592,355.928L207.592,261.521"  style="fill:none;stroke-width:1.4472;stroke:rgb(0,0,0);" />
+<text x="210.73" y="22.95" text-anchor="middle" fill="rgb(0,0,0)" font-size="156.25%" dominant-baseline="central">Names Of Vertexes</text>
+</svg>
