@@ -1,0 +1,24 @@
+pikchr-rs
+=========
+
+This crate is a pure-Rust port of Pikchr, the PIC-inspired diagram language.
+The pikchr-rs port itself is licensed under the MIT license (see LICENSE).
+
+Original Pikchr
+---------------
+Pikchr was created by D. Richard Hipp <drh@sqlite.org> and is distributed under
+the Zero-Clause BSD license. Project home: https://pikchr.org/
+
+The source of truth for this port is the Lemon grammar file `pikchr.y` from the
+upstream Pikchr repository (https://github.com/drhsqlite/pikchr). No upstream C
+code is used or linked; the semantics were re-implemented in Rust by reference
+to `pikchr.y`.
+
+This port
+---------
+Idea / originator: gzivdo.
+Implementation: ported with Claude (Anthropic) acting as co-author.
+
+The upstream 0BSD license imposes no conditions (no attribution requirement,
+no copyleft), which permits this port to be released under MIT. This NOTICE is
+provided as a courtesy to acknowledge the original author of Pikchr.

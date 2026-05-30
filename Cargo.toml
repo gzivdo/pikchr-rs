@@ -1,0 +1,29 @@
+[package]
+name = "pikchr-rs"
+version = "0.0.1"
+edition = "2021"
+rust-version = "1.74"
+description = "Pure-Rust port of the Pikchr (PIC-like) diagram language: text -> SVG, no C / no FFI."
+license = "MIT"
+repository = "https://github.com/gzivdo/pikchr-rs"
+keywords = ["pikchr", "diagram", "svg", "pic", "graphics"]
+categories = ["graphics", "parsing", "text-processing"]
+readme = "README.md"
+exclude = ["reference/", "TZ_pikchr_rust_port.md", "tests/corpus/", "tests/golden/"]
+
+[lib]
+name = "pikchr_rs"
+path = "src/lib.rs"
+
+[dependencies]
+lalrpop-util = { version = "0.20", features = ["lexer"] }
+thiserror = "1"
+
+[build-dependencies]
+lalrpop = { version = "0.20", default-features = false }
+
+[dev-dependencies]
+insta = "1"
+
+[profile.release]
+opt-level = 3

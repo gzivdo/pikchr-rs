@@ -1,0 +1,29 @@
+// P0 grammar: trivial, only validates the LALRPOP <-> external-lexer pipeline.
+// The real Pikchr grammar (~156 rules from pikchr.y, lines 563-795) is ported
+// in P2.
+
+use crate::token::Token;
+use crate::error::LexError;
+
+grammar;
+
+// A document is a (possibly empty) list of numbers separated by EOLs.
+pub Document: Vec<f64> = {
+    <ns:(<Num> "eol")*> <last:Num?> => {
+        let mut v = ns;
+        if let Some(n) = last { v.push(n); }
+        v
+    }
+};
+
+Num: f64 = <n:"num"> => n;
+
+extern {
+    type Location = usize;
+    type Error = LexError;
+
+    enum Token {
+        "num" => Token::Number(<f64>),
+        "eol" => Token::Eol,
+    }
+}
