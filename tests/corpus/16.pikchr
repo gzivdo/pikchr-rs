@@ -1,0 +1,1 @@
+box "A"; circle "B" at 1st box.e + (0.5,0)

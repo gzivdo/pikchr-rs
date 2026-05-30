@@ -5,18 +5,6 @@ across the official `tests/` corpus. The port is incremental (milestones P0–P8
 anything deferred is tracked here with a reason. On completion this file should
 be empty.
 
-## Deferred to P5 (positioning & object references)
-
-These parse, but currently raise a clear "not yet implemented (P5)" error or are
-only partially handled:
-
-- Object references that resolve other objects: `last`, `2nd`, `previous`,
-  `Name.Sub`, `N-th [class]`, `... of/in ...` (`find_nth`).
-- `from` / `to` on lines, `then heading`, `go ... heading`, `... until even
-  with ...`, `same` / `same as`, `N-th vertex of`.
-- Full `at`/`with` edge placement is only partially handled (center/basic).
-- `chop` auto-trimming against target objects.
-
 ## Deferred to P6 (object & text fidelity)
 
 - `arc` and curved `spline` rendering (currently straight polylines).

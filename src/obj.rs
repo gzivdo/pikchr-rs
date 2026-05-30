@@ -99,6 +99,10 @@ impl PBox {
         self.add_xy(x - rx, y - ry);
         self.add_xy(x + rx, y + ry);
     }
+    /// `pik_bbox_contains_point`.
+    pub fn contains_point(&self, p: &PPoint) -> bool {
+        !self.is_empty() && p.x >= self.sw.x && p.x <= self.ne.x && p.y >= self.sw.y && p.y <= self.ne.y
+    }
 }
 
 /// An absolute-or-relative distance (`PRel`): `value = rAbs + value*rRel`.

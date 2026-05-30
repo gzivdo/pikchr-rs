@@ -163,6 +163,9 @@ pub struct Pik {
     m_tpath: i32,
     then_flag: bool,
     same_path: bool,
+    /// Last object resolved by name/reference (`p->lastRef`), used to find the
+    /// concrete objects a line connects for `chop`.
+    last_ref: Option<usize>,
 
     src: String,
 }
@@ -194,6 +197,7 @@ impl Pik {
             m_tpath: 0,
             then_flag: false,
             same_path: false,
+            last_ref: None,
             src: src.to_string(),
         }
     }
@@ -714,6 +718,96 @@ fn elem_offset(o: &PObj, cp: u8) -> PPoint {
         Class::File => file_offset(o.w, o.h, o.rad, cp),
         Class::Dot => PPoint::new(0.0, 0.0),
         _ => box_offset(o.w, o.h, o.rad, cp),
+    }
+}
+
+// ===== chop (line trimming at object boundaries) ========================
+
+/// True if a class has an `xChop` method (i.e. can trim a line at its edge).
+fn is_chopper(class: Class) -> bool {
+    matches!(
+        class,
+        Class::Box
+            | Class::Circle
+            | Class::Cylinder
+            | Class::Diamond
+            | Class::Dot
+            | Class::Ellipse
+            | Class::File
+            | Class::Oval
+            | Class::Text
+    )
+}
+
+/// `boxChop`.
+fn box_chop(o: &PObj, pt: PPoint) -> PPoint {
+    if o.w <= 0.0 || o.h <= 0.0 {
+        return o.pt_at;
+    }
+    let dx = (pt.x - o.pt_at.x) * o.h / o.w;
+    let dy = pt.y - o.pt_at.y;
+    let cp = if dx > 0.0 {
+        if dy >= 2.414 * dx {
+            cp::N
+        } else if dy >= 0.414 * dx {
+            cp::NE
+        } else if dy >= -0.414 * dx {
+            cp::E
+        } else if dy > -2.414 * dx {
+            cp::SE
+        } else {
+            cp::S
+        }
+    } else if dy >= -2.414 * dx {
+        cp::N
+    } else if dy >= -0.414 * dx {
+        cp::NW
+    } else if dy >= 0.414 * dx {
+        cp::W
+    } else if dy > 2.414 * dx {
+        cp::SW
+    } else {
+        cp::S
+    };
+    let off = elem_offset(o, cp);
+    PPoint::new(o.pt_at.x + off.x, o.pt_at.y + off.y)
+}
+
+/// `circleChop`.
+fn circle_chop(o: &PObj, pt: PPoint) -> PPoint {
+    let dx = pt.x - o.pt_at.x;
+    let dy = pt.y - o.pt_at.y;
+    let dist = dx.hypot(dy);
+    if dist < o.rad || dist <= 0.0 {
+        return o.pt_at;
+    }
+    PPoint::new(o.pt_at.x + dx * o.rad / dist, o.pt_at.y + dy * o.rad / dist)
+}
+
+/// `ellipseChop`.
+fn ellipse_chop(o: &PObj, pt: PPoint) -> PPoint {
+    if o.w <= 0.0 || o.h <= 0.0 {
+        return o.pt_at;
+    }
+    let dx = pt.x - o.pt_at.x;
+    let dy = pt.y - o.pt_at.y;
+    let s = o.h / o.w;
+    let dq = dx * s;
+    let dist = dq.hypot(dy);
+    if dist < o.h {
+        return o.pt_at;
+    }
+    PPoint::new(
+        o.pt_at.x + 0.5 * dq * o.h / (dist * s),
+        o.pt_at.y + 0.5 * dy * o.h / dist,
+    )
+}
+
+fn chop_of(o: &PObj, from: PPoint) -> PPoint {
+    match o.class {
+        Class::Circle | Class::Dot => circle_chop(o, from),
+        Class::Ellipse => ellipse_chop(o, from),
+        _ => box_chop(o, from),
     }
 }
 
@@ -1269,7 +1363,18 @@ impl Pik {
 
         if is_line {
             let n = self.n_tpath;
-            let path: Vec<PPoint> = self.a_tpath[..n].to_vec();
+            let mut path: Vec<PPoint> = self.a_tpath[..n].to_vec();
+            // "chop": trim the line where it meets a choppable target object.
+            let (b_chop, p_to, p_from) = {
+                let o = &self.objects[idx];
+                (o.b_chop, o.p_to, o.p_from)
+            };
+            if b_chop && n >= 2 {
+                let nt = self.autochop(path[n - 2], path[n - 1], p_to);
+                path[n - 1] = nt;
+                let nf = self.autochop(path[1], path[0], p_from);
+                path[0] = nf;
+            }
             {
                 let o = &mut self.objects[idx];
                 o.path = path;
@@ -1344,6 +1449,40 @@ impl Pik {
                 self.elem_move(c, dx, dy);
             }
         }
+    }
+
+    /// `pik_autochop`: trim the segment `from -> to` at the boundary of the
+    /// target object (or whichever choppable object is centered at `to`).
+    fn autochop(&self, from: PPoint, to: PPoint, target: Option<usize>) -> PPoint {
+        let chopper = match target {
+            Some(i) if is_chopper(self.objects[i].class) => Some(i),
+            _ => self.find_chopper(&self.list, to, from),
+        };
+        match chopper {
+            Some(i) => chop_of(&self.objects[i], from),
+            None => to,
+        }
+    }
+
+    /// `pik_find_chopper`: a choppable object centered at `center` whose bbox
+    /// does not contain `other`, searched newest-first incl. sublists.
+    fn find_chopper(&self, list: &[usize], center: PPoint, other: PPoint) -> Option<usize> {
+        for &i in list.iter().rev() {
+            let o = &self.objects[i];
+            if is_chopper(o.class)
+                && o.pt_at.x == center.x
+                && o.pt_at.y == center.y
+                && !o.bbox.contains_point(&other)
+            {
+                return Some(i);
+            }
+            if let Some(sub) = &o.sublist {
+                if let Some(found) = self.find_chopper(sub, center, other) {
+                    return Some(found);
+                }
+            }
+        }
+        None
     }
 
     /// `pik_compute_layout_settings`.
@@ -1905,99 +2044,392 @@ impl Pik {
         }
     }
 
-    // ----- references / positioning: implemented in P5 ------------------
+    // ----- references / positioning -------------------------------------
 
-    fn p5(&mut self, span: (usize, usize)) {
-        self.error(
-            Some(span),
-            "object references / positioning not yet implemented (milestone P5)",
-        );
-    }
-
+    /// `pik_place_of_elem`.
     pub fn place_of_elem(&mut self, obj: Option<usize>, edge: Option<&Tok>) -> PPoint {
-        if let Some(i) = obj {
-            // Basic support: .center / no-edge -> ptAt; named edges via offset.
-            match edge {
-                None => self.objects[i].pt_at,
-                Some(e) => {
-                    let cp = e.e_edge;
-                    if cp == 0 || cp == crate::token::cp::C {
-                        self.objects[i].pt_at
-                    } else if cp == crate::token::cp::START {
-                        self.objects[i].pt_enter
-                    } else if cp == crate::token::cp::END {
-                        self.objects[i].pt_exit
-                    } else {
-                        let off = elem_offset(&self.objects[i], cp);
-                        let at = self.objects[i].pt_at;
-                        PPoint::new(at.x + off.x, at.y + off.y)
-                    }
-                }
-            }
+        let i = match obj {
+            Some(i) => i,
+            None => return PPoint::default(),
+        };
+        let e = match edge {
+            None => return self.objects[i].pt_at,
+            Some(e) => e,
+        };
+        let cp = e.e_edge;
+        if cp >= 1 && cp < crate::token::cp::END {
+            let off = elem_offset(&self.objects[i], cp);
+            let at = self.objects[i].pt_at;
+            PPoint::new(at.x + off.x, at.y + off.y)
+        } else if cp == crate::token::cp::START {
+            self.objects[i].pt_enter
         } else {
-            PPoint::default()
+            self.objects[i].pt_exit
         }
     }
 
-    pub fn find_byname(&mut self, _basis: Option<usize>, name: &Tok) -> Option<usize> {
-        // Search current list in reverse for a matching name.
-        for &i in self.list.iter().rev() {
+    fn search_list(&self, basis: Option<usize>) -> Option<Vec<usize>> {
+        match basis {
+            None => Some(self.list.clone()),
+            Some(b) => self.objects[b].sublist.clone(),
+        }
+    }
+
+    /// `pik_find_byname`.
+    pub fn find_byname(&mut self, basis: Option<usize>, name: &Tok) -> Option<usize> {
+        let list = match self.search_list(basis) {
+            Some(l) => l,
+            None => {
+                self.error(Some((name.start, name.end)), "no such object");
+                return None;
+            }
+        };
+        // Explicitly tagged objects first.
+        for &i in list.iter().rev() {
             if self.objects[i].name.as_deref() == Some(name.text.as_str()) {
+                self.last_ref = Some(i);
                 return Some(i);
+            }
+        }
+        // Then any object whose text exactly matches the name.
+        for &i in list.iter().rev() {
+            for t in &self.objects[i].txt {
+                if strip_quotes(&t.text) == name.text {
+                    self.last_ref = Some(i);
+                    return Some(i);
+                }
             }
         }
         self.error(Some((name.start, name.end)), "no such object");
         None
     }
 
-    pub fn find_nth(&mut self, _basis: Option<usize>, nth: &Tok) -> Option<usize> {
-        self.p5((nth.start, nth.end));
+    /// `pik_find_nth`. The `nth` token's text identifies the class ("last"/
+    /// "previous" = any, "[" = sublist), and `e_code` is the (signed) ordinal.
+    pub fn find_nth(&mut self, basis: Option<usize>, nth: &Tok) -> Option<usize> {
+        let list = match self.search_list(basis) {
+            Some(l) => l,
+            None => {
+                self.error(Some((nth.start, nth.end)), "no such object");
+                return None;
+            }
+        };
+        let class: Option<Class> = if nth.text == "last" || nth.text == "previous" {
+            None
+        } else if nth.text == "[" {
+            Some(Class::Sublist)
+        } else {
+            match Class::from_name(&nth.text) {
+                Some(c) => Some(c),
+                None => {
+                    self.error(Some((nth.start, nth.end)), "no such object type");
+                    return None;
+                }
+            }
+        };
+        let mut n = nth.e_code;
+        if n < 0 {
+            for &i in list.iter().rev() {
+                if let Some(c) = class {
+                    if self.objects[i].class != c {
+                        continue;
+                    }
+                }
+                n += 1;
+                if n == 0 {
+                    self.last_ref = Some(i);
+                    return Some(i);
+                }
+            }
+        } else {
+            for &i in &list {
+                if let Some(c) = class {
+                    if self.objects[i].class != c {
+                        continue;
+                    }
+                }
+                n -= 1;
+                if n == 0 {
+                    self.last_ref = Some(i);
+                    return Some(i);
+                }
+            }
+        }
+        self.error(Some((nth.start, nth.end)), "no such object");
         None
     }
 
-    pub fn nth_value(&mut self, _nth: &Tok) -> i32 {
-        0
+    /// `pik_nth_value`: convert "2nd"/"first" to an ordinal.
+    pub fn nth_value(&mut self, nth: &Tok) -> i32 {
+        let digits: String = nth.text.chars().take_while(|c| c.is_ascii_digit()).collect();
+        let mut i: i32 = digits.parse().unwrap_or(0);
+        if i > 1000 {
+            self.error(Some((nth.start, nth.end)), "value too big - max '1000th'");
+            i = 1;
+        }
+        if i == 0 && nth.text == "first" {
+            i = 1;
+        }
+        i
     }
 
     pub fn this_obj(&self) -> Option<usize> {
         self.cur
     }
 
-    pub fn set_at(&mut self, _edge: Option<&Tok>, _pt: PPoint, at: &Tok) {
-        // Basic "at POSITION" support: place the object's WITH point.
+    /// `pik_last_ref_object`: the last referenced object iff centered at `pt`.
+    fn last_ref_object(&mut self, pt: PPoint) -> Option<usize> {
+        let res = self.last_ref.filter(|&i| {
+            let at = self.objects[i].pt_at;
+            at.x == pt.x && at.y == pt.y
+        });
+        self.last_ref = None;
+        res
+    }
+
+    /// `pik_set_at`.
+    pub fn set_at(&mut self, edge: Option<&Tok>, at_pt: PPoint, err: &Tok) {
         let idx = self.cur();
+        if self.objects[idx].class.is_line() {
+            self.error(
+                Some((err.start, err.end)),
+                "use \"from\" and \"to\" to position this object",
+            );
+            return;
+        }
         if self.objects[idx].m_prop & prop::AT != 0 {
-            self.error(Some((at.start, at.end)), "position already fixed");
+            self.error(Some((err.start, err.end)), "location fixed by prior \"at\"");
             return;
         }
         self.objects[idx].m_prop |= prop::AT;
-        // Without edge handling beyond center, set the WITH point.
-        let edge_cp = _edge.map(|e| e.e_edge).unwrap_or(0);
-        self.objects[idx].with = _pt;
-        if edge_cp != 0 {
-            self.objects[idx].e_with = edge_cp;
+        let mut e_with = edge.map(|e| e.e_edge).unwrap_or(cp::C);
+        if e_with >= cp::END {
+            const E_DIR_TO_CP: [u8; 4] = [cp::E, cp::S, cp::W, cp::N];
+            let o = &self.objects[idx];
+            let d = if e_with == cp::END {
+                o.out_dir
+            } else {
+                (o.in_dir + 2) % 4
+            };
+            e_with = E_DIR_TO_CP[d as usize];
+        }
+        let o = &mut self.objects[idx];
+        o.e_with = e_with;
+        o.with = at_pt;
+    }
+
+    /// `pik_set_from`.
+    pub fn set_from(&mut self, span: (usize, usize), pt: PPoint) {
+        let idx = self.cur();
+        if !self.objects[idx].class.is_line() {
+            self.error(Some(span), "use \"at\" to position this object");
+            return;
+        }
+        if self.objects[idx].m_prop & prop::FROM != 0 {
+            self.error(Some(span), "line start location already fixed");
+            return;
+        }
+        if self.objects[idx].b_close {
+            self.error(Some(span), "polygon is closed");
+            return;
+        }
+        if self.n_tpath > 1 {
+            let dx = pt.x - self.a_tpath[0].x;
+            let dy = pt.y - self.a_tpath[0].y;
+            for i in 1..self.n_tpath {
+                self.a_tpath[i].x += dx;
+                self.a_tpath[i].y += dy;
+            }
+        }
+        self.a_tpath[0] = pt;
+        self.m_tpath = 3;
+        self.objects[idx].m_prop |= prop::FROM;
+        let from = self.last_ref_object(pt);
+        self.objects[idx].p_from = from;
+    }
+
+    /// `pik_add_to`.
+    pub fn add_to(&mut self, span: (usize, usize), pt: PPoint) {
+        let idx = self.cur();
+        if !self.objects[idx].class.is_line() {
+            self.error(Some(span), "use \"at\" to position this object");
+            return;
+        }
+        if self.objects[idx].b_close {
+            self.error(Some(span), "polygon is closed");
+            return;
+        }
+        self.reset_samepath();
+        let mut n = self.n_tpath - 1;
+        if n == 0 || self.m_tpath == 3 || self.then_flag {
+            n = self.next_rpath();
+        }
+        self.a_tpath[n] = pt;
+        self.m_tpath = 3;
+        let to = self.last_ref_object(pt);
+        self.objects[idx].p_to = to;
+    }
+
+    /// `pik_move_hdg`: "then [dist] heading ANGLE" or "then [dist] EDGEPT".
+    pub fn move_hdg(
+        &mut self,
+        dist: PRel,
+        heading: Option<f64>,
+        edge: Option<u8>,
+        span: (usize, usize),
+    ) {
+        let idx = self.cur();
+        let r_dist = dist.abs + self.value("linewid") * dist.rel;
+        if !self.objects[idx].class.is_line() {
+            self.error(Some(span), "use with line-oriented objects only");
+            return;
+        }
+        self.reset_samepath();
+        let mut n = self.next_rpath();
+        while n < 1 {
+            n = self.next_rpath();
+        }
+        let mut r_hdg = if let Some(a) = heading {
+            a.rem_euclid(360.0)
+        } else {
+            let e = edge.unwrap_or(0);
+            if e == cp::C {
+                self.error(Some(span), "syntax error");
+                return;
+            }
+            hdg_angle(e)
+        };
+        self.objects[idx].out_dir = if r_hdg <= 45.0 {
+            dir::UP
+        } else if r_hdg <= 135.0 {
+            dir::RIGHT
+        } else if r_hdg <= 225.0 {
+            dir::DOWN
+        } else if r_hdg <= 315.0 {
+            dir::LEFT
+        } else {
+            dir::UP
+        };
+        r_hdg *= DEG2RAD;
+        self.a_tpath[n].x += r_dist * r_hdg.sin();
+        self.a_tpath[n].y += r_dist * r_hdg.cos();
+        self.m_tpath = 2;
+    }
+
+    /// `pik_evenwith`: "DIR until even with POSITION".
+    pub fn evenwith(&mut self, d: i32, span: (usize, usize), place: PPoint) {
+        let idx = self.cur();
+        if !self.objects[idx].class.is_line() {
+            self.error(Some(span), "use with line-oriented objects only");
+            return;
+        }
+        self.reset_samepath();
+        let mut n = self.n_tpath - 1;
+        if self.then_flag || self.m_tpath == 3 || n == 0 {
+            n = self.next_rpath();
+            self.then_flag = false;
+        }
+        match d {
+            dir::DOWN | dir::UP => {
+                if self.m_tpath & 2 != 0 {
+                    n = self.next_rpath();
+                }
+                self.a_tpath[n].y = place.y;
+                self.m_tpath |= 2;
+            }
+            dir::RIGHT | dir::LEFT => {
+                if self.m_tpath & 1 != 0 {
+                    n = self.next_rpath();
+                }
+                self.a_tpath[n].x = place.x;
+                self.m_tpath |= 1;
+            }
+            _ => {}
+        }
+        self.objects[idx].out_dir = d;
+    }
+
+    /// `pik_same` / `same as`.
+    pub fn same(&mut self, span: (usize, usize), other: Option<usize>) {
+        let idx = self.cur();
+        let class = self.objects[idx].class;
+        let other = match other {
+            Some(o) => o,
+            None => {
+                let found = self
+                    .list
+                    .iter()
+                    .rev()
+                    .copied()
+                    .find(|&i| self.objects[i].class == class);
+                match found {
+                    Some(o) => o,
+                    None => {
+                        self.error(Some(span), "no prior objects of the same type");
+                        return;
+                    }
+                }
+            }
+        };
+        let src = self.objects[other].clone();
+        if !src.path.is_empty() && class.is_line() {
+            let dx = self.a_tpath[0].x - src.path[0].x;
+            let dy = self.a_tpath[0].y - src.path[0].y;
+            for i in 1..src.path.len() {
+                self.a_tpath[i] = PPoint::new(src.path[i].x + dx, src.path[i].y + dy);
+            }
+            self.n_tpath = src.path.len();
+            self.m_tpath = 3;
+            self.same_path = true;
+        }
+        let o = &mut self.objects[idx];
+        if !class.is_line() {
+            o.w = src.w;
+            o.h = src.h;
+        }
+        o.rad = src.rad;
+        o.sw = src.sw;
+        o.dashed = src.dashed;
+        o.dotted = src.dotted;
+        o.fill = src.fill;
+        o.color = src.color;
+        o.cw = src.cw;
+        o.larrow = src.larrow;
+        o.rarrow = src.rarrow;
+        o.b_close = src.b_close;
+        o.b_chop = src.b_chop;
+        o.i_layer = src.i_layer;
+    }
+
+    /// `pik_behind`.
+    pub fn behind(&mut self, other: Option<usize>) {
+        if let Some(o) = other {
+            let idx = self.cur();
+            let ol = self.objects[o].i_layer;
+            if self.objects[idx].i_layer >= ol {
+                self.objects[idx].i_layer = ol - 1;
+            }
         }
     }
 
-    pub fn set_from(&mut self, span: (usize, usize), _pt: PPoint) {
-        self.p5(span);
-    }
-    pub fn add_to(&mut self, span: (usize, usize), _pt: PPoint) {
-        self.p5(span);
-    }
-    pub fn move_hdg(&mut self, span: (usize, usize)) {
-        self.p5(span);
-    }
-    pub fn evenwith(&mut self, span: (usize, usize), _pt: PPoint) {
-        self.p5(span);
-    }
-    pub fn same(&mut self, span: (usize, usize), _obj: Option<usize>) {
-        self.p5(span);
-    }
-    pub fn behind(&mut self, _obj: Option<usize>) {}
-    pub fn nth_vertex(&mut self, nth: &Tok, _err: &Tok, _obj: Option<usize>) -> PPoint {
-        self.p5((nth.start, nth.end));
-        PPoint::default()
+    /// `pik_nth_vertex`.
+    pub fn nth_vertex(&mut self, nth: &Tok, err: &Tok, obj: Option<usize>) -> PPoint {
+        let i = match obj {
+            Some(i) => i,
+            None => return self.a_tpath[0],
+        };
+        if !self.objects[i].class.is_line() {
+            self.error(Some((err.start, err.end)), "object is not a line");
+            return PPoint::default();
+        }
+        let digits: String = nth.text.chars().take_while(|c| c.is_ascii_digit()).collect();
+        let n: usize = digits.parse().unwrap_or(0);
+        let np = self.objects[i].path.len();
+        if n < 1 || n > np {
+            self.error(Some((nth.start, nth.end)), "no such vertex");
+            return PPoint::default();
+        }
+        self.objects[i].path[n - 1]
     }
     pub fn property_of(&mut self, obj: Option<usize>, prop_tok: &Tok) -> f64 {
         if let Some(i) = obj {
@@ -2012,6 +2444,10 @@ impl Pik {
                 "color" => o.color,
                 "x" => o.pt_at.x,
                 "y" => o.pt_at.y,
+                "top" => o.bbox.ne.y,
+                "bottom" => o.bbox.sw.y,
+                "left" => o.bbox.sw.x,
+                "right" => o.bbox.ne.x,
                 _ => 0.0,
             }
         } else {
