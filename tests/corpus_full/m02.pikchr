@@ -1,0 +1,2 @@
+define ab {$1 "$2"}
+ab(box, hi); ab(circle, yo)

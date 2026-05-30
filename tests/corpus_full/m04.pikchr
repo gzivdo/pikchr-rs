@@ -1,0 +1,2 @@
+define b {box wid $1 ht $2}
+b(1,0.5); b(0.5,1)

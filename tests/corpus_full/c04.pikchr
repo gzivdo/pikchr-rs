@@ -1,0 +1,1 @@
+box; [ circle "x"; circle "y" ] with .n at last box.s

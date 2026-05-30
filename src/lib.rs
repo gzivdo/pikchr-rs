@@ -42,7 +42,18 @@ pub fn pikchr(input: &str, flags: PikchrFlags) -> Result<String, PikchrError> {
     use lalrpop_util::ParseError;
 
     let mut ctx = pik::Pik::new(input, flags.dark_mode);
-    let parse = grammar::DocumentParser::new().parse(&mut ctx, lexer::Lexer::new(input));
+
+    // Macro expansion ($1..$9 and `define`) happens up front at tokenize time,
+    // mirroring upstream's `pik_tokenize`; the parser consumes the expanded
+    // stream.
+    let tokens = match lexer::tokenize(input) {
+        Ok(t) => t,
+        Err(e) => {
+            let (line, col) = line_col(input, e.at);
+            return Err(PikchrError::new(e.message, line, col));
+        }
+    };
+    let parse = grammar::DocumentParser::new().parse(&mut ctx, tokens.into_iter().map(Ok));
 
     // A Pikchr-level (semantic) error recorded during parsing takes priority.
     if let Some(e) = ctx.err.take() {

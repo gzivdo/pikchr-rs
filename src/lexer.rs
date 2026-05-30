@@ -480,9 +480,7 @@ impl<'input> Iterator for Lexer<'input> {
             self.pos = start + len;
 
             let text = self.slice(start, end);
-            let mut tok = Tok::new(text, start, end);
-
-            let token = match raw {
+            match raw {
                 Raw::Whitespace | Raw::Parameter => continue,
                 Raw::Error => {
                     return Some(Err(LexError {
@@ -490,49 +488,318 @@ impl<'input> Iterator for Lexer<'input> {
                         at: start,
                     }))
                 }
-                Raw::Eol => Token::Eol(tok),
-                Raw::Str => Token::Str(tok),
-                Raw::Codeblock => Token::Codeblock(tok),
-                Raw::Assign(op) => Token::Assign(op, tok),
-                Raw::Slash => Token::Slash(tok),
-                Raw::Plus => Token::Plus(tok),
-                Raw::Star => Token::Star(tok),
-                Raw::Percent => Token::Percent(tok),
-                Raw::Lp => Token::Lp(tok),
-                Raw::Rp => Token::Rp(tok),
-                Raw::Lb => Token::Lb(tok),
-                Raw::Rb => Token::Rb(tok),
-                Raw::Comma => Token::Comma(tok),
-                Raw::Colon => Token::Colon(tok),
-                Raw::Gt => Token::Gt(tok),
-                Raw::Eq => Token::Eq(tok),
-                Raw::Minus => Token::Minus(tok),
-                Raw::Lt => Token::Lt(tok),
-                Raw::Rarrow => Token::Rarrow(tok),
-                Raw::Larrow => Token::Larrow(tok),
-                Raw::Lrarrow => Token::Lrarrow(tok),
-                Raw::DotE => Token::DotE(tok),
-                Raw::DotU => Token::DotU(tok),
-                Raw::DotL => Token::DotL(tok),
-                Raw::DotXy => Token::DotXy(tok),
-                Raw::Number => Token::Num(atof(text), tok),
-                Raw::Nth => Token::Nth(tok),
-                Raw::Classname => Token::Classname(tok),
-                Raw::Id => Token::Id(tok),
-                Raw::Placename => Token::Placename(tok),
-                Raw::Kw(k, code, edge) => {
-                    tok.e_code = code;
-                    tok.e_edge = edge;
-                    Token::Kw(k, tok)
+                _ => {
+                    if let Some(token) = raw_to_token(raw, text, start, end) {
+                        return Some(Ok((start, token, end)));
+                    }
+                    continue;
                 }
-                // ISO date: upstream substitutes a "YYYY-MM-DD..." string
-                // literal. We emit an empty string literal placeholder for now.
-                Raw::Isodate => {
-                    tok.text = "\"\"".to_string();
-                    Token::Str(tok)
-                }
-            };
-            return Some(Ok((start, token, end)));
+            }
         }
+    }
+}
+
+/// Convert a (non-whitespace, non-error, non-parameter) raw classification to
+/// a [`Token`]. Returns `None` only for raws that produce no token.
+fn raw_to_token(raw: Raw, text: &str, start: usize, end: usize) -> Option<Token> {
+    let mut tok = Tok::new(text, start, end);
+    Some(match raw {
+        Raw::Eol => Token::Eol(tok),
+        Raw::Str => Token::Str(tok),
+        Raw::Codeblock => Token::Codeblock(tok),
+        Raw::Assign(op) => Token::Assign(op, tok),
+        Raw::Slash => Token::Slash(tok),
+        Raw::Plus => Token::Plus(tok),
+        Raw::Star => Token::Star(tok),
+        Raw::Percent => Token::Percent(tok),
+        Raw::Lp => Token::Lp(tok),
+        Raw::Rp => Token::Rp(tok),
+        Raw::Lb => Token::Lb(tok),
+        Raw::Rb => Token::Rb(tok),
+        Raw::Comma => Token::Comma(tok),
+        Raw::Colon => Token::Colon(tok),
+        Raw::Gt => Token::Gt(tok),
+        Raw::Eq => Token::Eq(tok),
+        Raw::Minus => Token::Minus(tok),
+        Raw::Lt => Token::Lt(tok),
+        Raw::Rarrow => Token::Rarrow(tok),
+        Raw::Larrow => Token::Larrow(tok),
+        Raw::Lrarrow => Token::Lrarrow(tok),
+        Raw::DotE => Token::DotE(tok),
+        Raw::DotU => Token::DotU(tok),
+        Raw::DotL => Token::DotL(tok),
+        Raw::DotXy => Token::DotXy(tok),
+        Raw::Number => Token::Num(atof(text), tok),
+        Raw::Nth => Token::Nth(tok),
+        Raw::Classname => Token::Classname(tok),
+        Raw::Id => Token::Id(tok),
+        Raw::Placename => Token::Placename(tok),
+        Raw::Kw(k, code, edge) => {
+            tok.e_code = code;
+            tok.e_edge = edge;
+            Token::Kw(k, tok)
+        }
+        // ISO date: upstream substitutes a "YYYY-MM-DD..." string literal.
+        Raw::Isodate => {
+            tok.text = "\"\"".to_string();
+            Token::Str(tok)
+        }
+        Raw::Whitespace | Raw::Parameter | Raw::Error => return None,
+    })
+}
+
+/// A `define`d macro: name plus the byte range of its body in the source.
+struct Macro {
+    name: String,
+    body: usize,
+    body_len: usize,
+    in_use: bool,
+}
+
+const MAX_MACRO_DEPTH: usize = 10;
+
+#[derive(PartialEq)]
+enum DefState {
+    None,
+    Name,
+    Body,
+}
+
+/// Tokenize with `define`-macro expansion and `$1..$9` parameter substitution,
+/// mirroring `pik_tokenize` / `pik_parse_macro_args`. Because macro bodies and
+/// call arguments are substrings of the source, the resulting token spans stay
+/// valid offsets into the original input.
+pub fn tokenize(input: &str) -> Result<Vec<(usize, Token, usize)>, LexError> {
+    let mut bytes = input.as_bytes().to_vec();
+    bytes.push(0);
+    let mut t = Tokenizer {
+        input,
+        bytes,
+        macros: Vec::new(),
+        out: Vec::new(),
+        err: None,
+        def: DefState::None,
+        pending_name: None,
+    };
+    let n = input.len();
+    t.run(0, n, &EMPTY_ARGS, 0);
+    match t.err {
+        Some(e) => Err(e),
+        None => Ok(t.out),
+    }
+}
+
+type Args = [Option<(usize, usize)>; 9];
+const EMPTY_ARGS: Args = [None; 9];
+
+struct Tokenizer<'a> {
+    input: &'a str,
+    bytes: Vec<u8>,
+    macros: Vec<Macro>,
+    out: Vec<(usize, Token, usize)>,
+    err: Option<LexError>,
+    def: DefState,
+    pending_name: Option<(usize, usize)>,
+}
+
+impl<'a> Tokenizer<'a> {
+    fn find_macro(&self, name: &str) -> Option<usize> {
+        self.macros.iter().position(|m| m.name == name)
+    }
+
+    /// Tokenize the byte range `[base, base+n)` with the given `$n` arguments.
+    fn run(&mut self, base: usize, n: usize, args: &Args, depth: usize) {
+        let mut i = 0usize;
+        while i < n && self.bytes[base + i] != 0 && self.err.is_none() {
+            let abs = base + i;
+            let (sz, raw) = token_length(&self.bytes[abs..], true);
+            match raw {
+                Raw::Whitespace => {
+                    i += sz;
+                    continue;
+                }
+                Raw::Error => {
+                    self.err = Some(LexError {
+                        message: "unrecognized token".to_string(),
+                        at: abs,
+                    });
+                    break;
+                }
+                _ => {}
+            }
+            if sz + i > n {
+                self.err = Some(LexError {
+                    message: "syntax error".to_string(),
+                    at: abs,
+                });
+                break;
+            }
+            // $n parameter: substitute the corresponding argument's text.
+            if raw == Raw::Parameter {
+                let idx = (self.bytes[abs + 1] - b'1') as usize;
+                if let Some((ps, pl)) = args[idx] {
+                    if pl > 0 {
+                        if depth >= MAX_MACRO_DEPTH {
+                            self.err = Some(LexError {
+                                message: "macros nested too deep".to_string(),
+                                at: abs,
+                            });
+                            break;
+                        }
+                        self.run(ps, pl, &EMPTY_ARGS, depth + 1);
+                    }
+                }
+                i += sz;
+                continue;
+            }
+            // Macro invocation (an ID naming a macro, unless it is the name in
+            // a `define` we are currently reading).
+            if raw == Raw::Id && self.def != DefState::Name {
+                let name = &self.input[abs..abs + sz];
+                if let Some(mi) = self.find_macro(name) {
+                    if self.macros[mi].in_use {
+                        self.err = Some(LexError {
+                            message: "recursive macro definition".to_string(),
+                            at: abs,
+                        });
+                        break;
+                    }
+                    if depth >= MAX_MACRO_DEPTH {
+                        self.err = Some(LexError {
+                            message: "macros nested too deep".to_string(),
+                            at: abs,
+                        });
+                        break;
+                    }
+                    let (consumed, call_args) =
+                        self.parse_macro_args(abs + sz, n - (i + sz), args);
+                    if self.err.is_some() {
+                        break;
+                    }
+                    let (body, body_len) = (self.macros[mi].body, self.macros[mi].body_len);
+                    self.macros[mi].in_use = true;
+                    self.run(body, body_len, &call_args, depth + 1);
+                    self.macros[mi].in_use = false;
+                    i += sz + consumed;
+                    continue;
+                }
+            }
+            // Ordinary token: emit it, advancing the `define` state machine.
+            let text = &self.input[abs..abs + sz];
+            if let Some(token) = raw_to_token(raw.clone(), text, abs, abs + sz) {
+                self.advance_def(&token, abs, sz);
+                self.out.push((abs, token, abs + sz));
+            }
+            i += sz;
+        }
+    }
+
+    /// Track `DEFINE ID CODEBLOCK` to register macros during tokenization.
+    fn advance_def(&mut self, token: &Token, abs: usize, sz: usize) {
+        match (&self.def, token) {
+            (_, Token::Kw(crate::token::Kw::Define, _)) => {
+                self.def = DefState::Name;
+            }
+            (DefState::Name, Token::Id(_)) => {
+                self.pending_name = Some((abs, sz));
+                self.def = DefState::Body;
+            }
+            (DefState::Body, Token::Codeblock(_)) => {
+                // Body is the code block without its surrounding braces.
+                if let Some((ns, nl)) = self.pending_name {
+                    let name = self.input[ns..ns + nl].to_string();
+                    let body = abs + 1;
+                    let body_len = sz.saturating_sub(2);
+                    match self.find_macro(&name) {
+                        Some(mi) => {
+                            self.macros[mi].body = body;
+                            self.macros[mi].body_len = body_len;
+                            self.macros[mi].in_use = false;
+                        }
+                        None => self.macros.push(Macro {
+                            name,
+                            body,
+                            body_len,
+                            in_use: false,
+                        }),
+                    }
+                }
+                self.def = DefState::None;
+                self.pending_name = None;
+            }
+            _ => {
+                self.def = DefState::None;
+                self.pending_name = None;
+            }
+        }
+    }
+
+    /// Port of `pik_parse_macro_args`: parse `(a, b, ...)` after a macro name.
+    /// Returns (bytes consumed incl. parens, the up-to-9 argument ranges).
+    fn parse_macro_args(&mut self, abs: usize, navail: usize, outer: &Args) -> (usize, Args) {
+        let mut args: Args = EMPTY_ARGS;
+        let z = abs; // absolute offset of '('
+        if navail == 0 || self.bytes[z] != b'(' {
+            return (0, args);
+        }
+        // Raw (start, end) byte ranges per argument, before $n resolution.
+        let mut ranges: [(usize, usize); 9] = [(0, 0); 9];
+        let mut n_arg = 0usize;
+        let mut i_start = 1usize;
+        let mut depth = 0i32;
+        let mut i = 1usize;
+        while i < navail && self.bytes[z + i] != b')' {
+            let (sz, _) = token_length(&self.bytes[z + i..], false);
+            if sz != 1 {
+                i += sz;
+                continue;
+            }
+            let c = self.bytes[z + i];
+            if c == b',' && depth <= 0 {
+                ranges[n_arg] = (z + i_start, z + i);
+                if n_arg == 8 {
+                    self.err = Some(LexError {
+                        message: "too many macro arguments - max 9".to_string(),
+                        at: z,
+                    });
+                    return (0, args);
+                }
+                n_arg += 1;
+                i_start = i + 1;
+                depth = 0;
+            } else if c == b'(' || c == b'{' || c == b'[' {
+                depth += 1;
+            } else if c == b')' || c == b'}' || c == b']' {
+                depth -= 1;
+            }
+            i += sz;
+        }
+        if i < navail && self.bytes[z + i] == b')' {
+            ranges[n_arg] = (z + i_start, z + i);
+            for j in 0..=n_arg {
+                let (mut s, mut e) = ranges[j];
+                while s < e && (self.bytes[s] as char).is_whitespace() {
+                    s += 1;
+                }
+                while e > s && (self.bytes[e - 1] as char).is_whitespace() {
+                    e -= 1;
+                }
+                // A bare $n argument forwards the outer context's argument.
+                if e - s == 2 && self.bytes[s] == b'$' && (b'1'..=b'9').contains(&self.bytes[s + 1]) {
+                    let oi = (self.bytes[s + 1] - b'1') as usize;
+                    args[j] = outer[oi];
+                } else if e > s {
+                    args[j] = Some((s, e - s));
+                } else {
+                    args[j] = None;
+                }
+            }
+            return (i + 1, args);
+        }
+        self.err = Some(LexError {
+            message: "unterminated macro argument list".to_string(),
+            at: z,
+        });
+        (0, args)
     }
 }
